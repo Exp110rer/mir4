@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-oo8)z!f*0xjoz37zumz3a$w=hkdzoo#d61%1e1s=^6$ge6uzyo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ihubzone.ru', 'www.hubzone.ru', '127.0.0.1']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'hub_api',
 ]
 
 MIDDLEWARE = [
