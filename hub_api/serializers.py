@@ -20,7 +20,8 @@ class OrderModelSerializer(serializers.ModelSerializer):
         except Hub.DoesNotExist:
             raise serializers.ValidationError('The specified hub does not exist.')
         else:
-            if MirUser.objects.get(id=self.initial_data['updatedBy']).hub == hub:
+            if MirUser.objects.get(id=self.initial_data['updatedBy']).hub == hub or \
+                    MirUser.objects.get(id=self.initial_data['updatedBy']).hub.name == 'H00B':
                 return hub
             else:
                 raise serializers.ValidationError('The specified hub does not match the sender.')
