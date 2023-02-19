@@ -6,3 +6,5 @@ from django.http import HttpResponse
 
 def entry_start(request):
     return HttpResponse('OK')
+
+

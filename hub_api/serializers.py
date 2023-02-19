@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.request import Request
 from hub_api.models import Order, Item
 from mirusers.models import Hub, MirUser
 
@@ -7,7 +6,7 @@ from mirusers.models import Hub, MirUser
 class ItemModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['uid', 'sku', 'batch']
+        fields = ['uid', 'sku', 'batch', 'uom']
 
 
 class OrderModelSerializer(serializers.ModelSerializer):
@@ -51,8 +50,8 @@ class OrderModelSerializer(serializers.ModelSerializer):
             new_order.partial = validated_data['partial']
             new_order.updatedBy = validated_data['updatedBy']
             new_order.save(update_fields=['iteration', 'partial', 'updatedBy', 'updated'])
-        for item_data in items_data:
-            Item.objects.create(order=new_order, iteration=new_order.iteration, **item_data)
+        Item.objects.bulk_create(
+            [Item(order=new_order, iteration=new_order.iteration, **item_data) for item_data in items_data])
         return new_order
 
     class Meta:

@@ -37,4 +37,5 @@ class MirUserAdmin(UserAdmin):
 
 @admin.register(Hub)
 class HubAdmin(admin.ModelAdmin):
-    list_display = ('name', 'city')
+    list_display = ('name', 'city', 'keeper')
+    ordering = ('name',)
