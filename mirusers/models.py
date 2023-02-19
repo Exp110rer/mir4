@@ -12,11 +12,15 @@ import hub_api.models
 
 class Hub(models.Model):
     name = models.CharField(max_length=10, verbose_name='Hub identifier')
+    keeper = models.CharField(max_length=250, verbose_name="Warehouse keeper")
     city = models.CharField(max_length=25, verbose_name='Hub city')
 
     class Meta:
         verbose_name = 'Hub'
         verbose_name_plural = 'Hubs'
+
+    def __str__(self):
+        return self.name
 
 
 class MirUser(AbstractBaseUser, PermissionsMixin):
