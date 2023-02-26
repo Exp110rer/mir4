@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hub_api/', include('hub_api.urls', namespace='hub_api')),
-    path('', RedirectView.as_view(url='/hub_api/'))
+    path('', TemplateView.as_view(template_name='hub_api/index.html')),
+    # path('', RedirectView.as_view(url='/hub_api/'))
 ]
