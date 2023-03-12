@@ -35,20 +35,17 @@ class OrderModelSerializerSNS(serializers.ModelSerializer):
 
     def create(self, validated_data):
         sPositionSet = validated_data.pop('sPositionSet')
-        order = Order(**validated_data)
-        compositions = list()
+        order = Order.objects.create(**validated_data)
         items = list()
         for position in sPositionSet:
             sUSNSet = position.pop('sUSNSet')
             if position['amount'] != len(sUSNSet):
+                order.delete()
                 raise serializers.ValidationError('The amount does not match the number of items')
-            composition = Composition(order=order, **position)
-            compositions.append(composition)
+            composition = Composition.objects.create(order=order, **position)
             for usnset in sUSNSet:
                 item = Item(composition=composition, **usnset)
                 items.append(item)
-        order.save()
-        Composition.objects.bulk_create(compositions)
         Item.objects.bulk_create(items)
         return order
 
