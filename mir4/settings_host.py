@@ -82,7 +82,20 @@ DATABASES = {
         'NAME': 'u1919191_ihubzone',
         'USER': 'u1919191_service',
         'PASSWORD': 'Yjdsqlj[jl2023',
-        'HOST': 'localhost'
+        'HOST': 'localhost',
+        'OPTIONS': {
+         "init_command": "SET foreign_key_checks = 0;",
+        },
+    },
+    'ext_tnt': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'u1919191_ext_tnt',
+        'USER': 'u1919191_service',
+        'PASSWORD': 'Yjdsqlj[jl2023',
+        'HOST': 'localhost',
+        'OPTIONS': {
+         "init_command": "SET foreign_key_checks = 0;",
+        },
     }
 }
 
