@@ -5,8 +5,6 @@ from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-import hub_api.models
-
 
 # Create your models here.
 

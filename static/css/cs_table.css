@@ -1,0 +1,20 @@
+table,
+td {
+    border: 1px solid #333;
+    background-color: lightgoldenrodyellow;
+}
+
+thead,
+tfoot {
+    background-color: #333;
+    color: #fff;
+}
+.td_table{
+    font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+    font-size: large;
+}
+th{
+    font-family: Arial;
+    font-size: small;
+    color: gray;
+}

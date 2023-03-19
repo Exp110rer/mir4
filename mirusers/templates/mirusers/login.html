@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login form</title>
+</head>
+<body>
+    <h1>Login form</h1>
+    <form action="{% url 'mirusers:login' %}" method="POST">
+    {% csrf_token %}
+        <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password.label_tag }}</td>
+            <td>{{ form.password }}</td>
+        </tr>
+        </table>
+        <br>
+        <input type="submit" value="login">
+        <br>
+        {% if form.errors %}
+            {{ form.errors }}
+        {% endif %}
+    </form>
+</body>
+</html>
