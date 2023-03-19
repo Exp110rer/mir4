@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders for BCP</title>
+</head>
+<body>
+<h1>Orders for BCP</h1>
+{% for order in object_list %}
+    {{ order.order }}
+    {{ order.saleType }}
+    {{ order.status }}
+    {{ order.pk }}
+    <a href="{% url 'hub_portal:bcp_excel' order.pk %}">Download</a>
+    <br>
+{% endfor %}
+</body>
+</html>

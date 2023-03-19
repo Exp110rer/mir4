@@ -1,0 +1,34 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders for CS</title>
+    <link rel="stylesheet" href="{% static 'css/cs_table.css' %}" />
+</head>
+<body>
+<table>
+    <thead>
+        <tr>
+            <th colspan="2">Orders for SC</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th> Order # </th>
+            <th> Sales type </th>
+            <th> Order status </th>
+            <th> xlxs link </th>
+        </tr>
+        {% for order in object_list %}
+        <tr>
+            <td class = "td_table" > --- {{ order.order }} --- </td>
+            <td> {{ order.saleType}} </td>
+            <td> {{ order.status}} </td>
+            <td><a href="{% url 'hub_portal:cs_excel' order.pk %}">{{ order.order }}</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>iHUBzone.ru</title>
+    <title>iHUBzone</title>
 </head>
 <body>
     <h2>iHUBzone.ru space</h2>
+    {{ user }} <br>
+    <a href="{% url 'mirusers:login' %}"> Login </a>
+    <a href="{% url 'mirusers:logout' %}">Logout</a>
 </body>
 </html>
