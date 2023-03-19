@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
+
 import mir4.db_routers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     'mirusers',
     'hub_api',
     'hub_portal',
-    'ext_tnt',
+    'ext_tnt'
 ]
 
 MIDDLEWARE = [
@@ -136,7 +137,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
