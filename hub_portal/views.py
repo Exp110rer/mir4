@@ -44,7 +44,7 @@ class OrderBCPDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         ws.cell(row=1, column=2, value='gtin')
         ws.cell(row=1, column=3, value='sku')
         for data in enumerate(items, start=2):
-            ws.cell(row=data[0], column=2, value=data[1].uid)
+            ws.cell(row=data[0], column=2, value=data[1].tuid)
             ws.cell(row=data[0], column=3, value=f"0000000000{data[1].sku}")
         file_obj = io.BytesIO()
         wb.save(file_obj)

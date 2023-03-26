@@ -20,12 +20,15 @@ class Order(DateTimeModel):
     hub = models.ForeignKey(Hub, on_delete=models.CASCADE, verbose_name='Shipped from location')
     saleType = models.CharField(max_length=4, verbose_name='Sale operation type', choices=OPERATION_TYPE_CHOICES)
     contractType = models.CharField(max_length=1, verbose_name='Contract type', choices=CONTRACT_TYPE_CHOICES)
-    itemsCount = models.PositiveSmallIntegerField(default=0, verbose_name='Quantity of items')
-    partial = models.BooleanField(default=False, verbose_name='Integrity status')
-    iteration = models.SmallIntegerField(default=1, verbose_name='Order processing iteration number')
+    buyoutDate = models.DateField(verbose_name='Date of planned buyout')
+    traceability = models.BooleanField(verbose_name='Traceability identification', default=True)
+    validation_uuid = models.UUIDField(verbose_name='Validation uuid', null=True, blank=True)
     status = models.SmallIntegerField(default=0, verbose_name='Order status')
     updatedBy = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Updated by',
                                   related_name='updatedBy')
+    itemsCount = models.PositiveSmallIntegerField(default=0, verbose_name='Quantity of items')
+    partial = models.BooleanField(default=False, verbose_name='Integrity status')
+    iteration = models.SmallIntegerField(default=1, verbose_name='Order processing iteration number')
 
     class Meta:
         verbose_name = 'Order'
@@ -48,7 +51,8 @@ class Composition(DateTimeModel):
 
 
 class Item(DateTimeModel):
-    uid = models.CharField(max_length=70, verbose_name='Item uniques id, T&T code', db_index=True)
+    uid = models.CharField(max_length=70, verbose_name='Item uniques id')
+    tuid = models.CharField(max_length=70, verbose_name='Tracking code', db_index=True)
     validity = models.SmallIntegerField(default=0, verbose_name='Item verification status')
     unitOfMeasure = models.CharField(max_length=10, verbose_name='Item Unit of measure', choices=UOM_CHOICES)
     sku = models.PositiveIntegerField(verbose_name='SKU number')
@@ -59,7 +63,7 @@ class Item(DateTimeModel):
     # order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.uid}"
+        return f"{self.tuid}"
 
     class Meta:
         verbose_name = 'Item'
