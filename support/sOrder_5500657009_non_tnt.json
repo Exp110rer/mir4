@@ -1,0 +1,34 @@
+{
+    "order": "5500657010",
+    "hub": "H02B",
+    "saleType": "RU14",
+    "contractType": "t",
+    "buyoutDate" : "2023-03-03",
+    "sPositionSet": [
+        {
+            "sku": 10135411,
+            "amount": 18,
+            "unitOfMeasure": "case"
+        },
+        {
+            "sku": 10135448,
+            "amount": 21,
+            "unitOfMeasure": "case"
+        },
+        {
+            "sku": 10135451,
+            "amount": 23,
+            "unitOfMeasure": "case"
+        },
+        {
+            "sku": 10135456,
+            "amount": 22,
+            "unitOfMeasure": "case"
+        },
+        {
+            "sku": 10135475,
+            "amount": 36,
+            "unitOfMeasure": "case"
+        }
+    ]
+}

@@ -12,6 +12,7 @@ class Hub(models.Model):
     name = models.CharField(max_length=10, verbose_name='Hub identifier')
     keeper = models.CharField(max_length=250, verbose_name="Warehouse keeper")
     city = models.CharField(max_length=25, verbose_name='Hub city')
+    erpname = models.CharField(max_length=25, verbose_name='Hub name in ERP', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Hub'
