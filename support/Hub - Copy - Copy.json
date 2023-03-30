@@ -1,1 +1,0 @@
-[{"model": "mirusers.hub", "pk": 1, "fields": {"name": "H00B", "keeper": "ООО \"Деловые Линии\"", "city": "МОСКВА"}}, {"model": "mirusers.hub", "pk": 2, "fields": {"name": "H01B", "keeper": "ООО \"Деловые Линии\"", "city": "КРАСНОДАР"}}, {"model": "mirusers.hub", "pk": 3, "fields": {"name": "H02B", "keeper": "ООО \"УК \"Грандо\",", "city": "КРАСНОДАР"}}]
