@@ -4,6 +4,7 @@
     "saleType": "RU14",
     "contractType": "t",
     "buyoutDate" : "2023-03-03",
+    "productCategory" : "FNC",
     "sPositionSet": [
         {
             "sku": 10135411,

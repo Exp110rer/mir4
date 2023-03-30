@@ -5,6 +5,13 @@ from mirusers.models import Hub
 UOM_CHOICES = [('case', 'mastercase'), ('out', 'outer')]
 OPERATION_TYPE_CHOICES = [('RU12', 'SPB_to_ITMS'), ('RU14', 'ITMS_to_SNS')]
 CONTRACT_TYPE_CHOICES = [('t', 'Traditional'), ('c', 'Consignment')]
+PRODUCT_CATEGORY = [
+    ('THS', 'GLO_стики'),
+    ('THA', 'GLO_аксессуары'),
+    ('GLO', 'GLO_устройства'),
+    ('FMC', 'Сигареты'),
+    ('VAP', 'Вейп')
+]
 
 
 class DateTimeModel(models.Model):
@@ -21,6 +28,7 @@ class Order(DateTimeModel):
     saleType = models.CharField(max_length=4, verbose_name='Sale operation type', choices=OPERATION_TYPE_CHOICES)
     contractType = models.CharField(max_length=1, verbose_name='Contract type', choices=CONTRACT_TYPE_CHOICES)
     buyoutDate = models.DateField(verbose_name='Date of planned buyout')
+    productCategory = models.CharField(max_length=3, verbose_name='Product category', choices=PRODUCT_CATEGORY)
     traceability = models.BooleanField(verbose_name='Traceability identification', default=True)
     validation_uuid = models.UUIDField(verbose_name='Validation uuid', null=True, blank=True)
     status = models.SmallIntegerField(default=0, verbose_name='Order status')
