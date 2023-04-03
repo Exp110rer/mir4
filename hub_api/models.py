@@ -10,7 +10,8 @@ PRODUCT_CATEGORY = [
     ('THA', 'GLO_аксессуары'),
     ('GLO', 'GLO_устройства'),
     ('FMC', 'Сигареты'),
-    ('VAP', 'Вейп')
+    ('VAP', 'Вейп'),
+    ('BDL', 'GLO_Bundle')
 ]
 
 
