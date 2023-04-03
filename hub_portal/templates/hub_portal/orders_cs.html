@@ -15,17 +15,30 @@
     </thead>
     <tbody>
         <tr>
-            <th> Order # </th>
+            <th> № Заказа</th>
+            <th> Хаб </th>
+            <th> Продажа/Возврат</th>
+            <th> Тип стока </th>
+            <th> Delivery Date </th>
             <th> Sales type </th>
-            <th> Order status </th>
+            <th> Статус заказа </th>
             <th> xlxs link </th>
         </tr>
         {% for order in object_list %}
         <tr>
             <td class = "td_table" > --- {{ order.order }} --- </td>
+            <td> {{ order.hub.erpname }} </td>
+            <td>Продажа</td>
+            <td> {{ order.productCategory }}</td>
+            <td> {{ order.buyoutDate }} </td>
             <td> {{ order.saleType}} </td>
-            <td> {{ order.status}} </td>
+            {% if order.status == 2 %} <td> Проверка завершена </td>
+            {% elif order.status == 1 %} <td> Проверяется ... </td>
+            {% elif order.status == 0 %} <td> Не проверен </td>
+            {% endif %}
+            {% if order.status == 2 %}
             <td><a href="{% url 'hub_portal:cs_excel' order.pk %}">{{ order.order }}</a></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

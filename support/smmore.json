@@ -1,0 +1,320 @@
+{
+    "participantId": "7705060700",
+    "productionLineId": "01",
+    "sku": 10107200,
+    "batch": "Q308388L",
+    "aggregationUnits": [
+        {
+            "unitSerialNumber": "01146600483608372168033C1110000006500",
+            "aggregatedItemsCount": 16,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 16,
+            "sntins": [
+                "0104660048360830212<kdtLs800500000093dGVz",
+                "0104660048360830212F.bquB800500000093dGVz",
+                "0104660048360830214f3wS&s800500000093dGVz",
+                "0104660048360830215+lorYm800500000093dGVz",
+                "0104660048360830216pDAQTT800500000093dGVz",
+                "010466004836083021bmxpkQr800500000093dGVz",
+                "010466004836083021E0Kc1ls800500000093dGVz",
+                "010466004836083021ER*SNLx800500000093dGVz",
+                "010466004836083021fbz,Fl,800500000093dGVz",
+                "010466004836083021hnKG3Qt800500000093dGVz",
+                "010466004836083021ItdUiOB800500000093dGVz",
+                "010466004836083021OuXDKCB800500000093dGVz",
+                "010466004836083021QefBkee800500000093dGVz",
+                "010466004836083021w&MGMU-800500000093dGVz",
+                "010466004836083021Wr'ItNH800500000093dGVz",
+                "010466004836083021Z/YjViR800500000093dGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "0104660048360830212<kdtLs8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399-\"CBT2PAAAAdGVz",
+                "00000046241399=phwbG-AAAAdGVz",
+                "00000046241399fa<DSooAAAAdGVz",
+                "00000046241399i)f'vleAAAAdGVz",
+                "00000046241399iyAOSo7AAAAdGVz",
+                "00000046241399JuULI<aAAAAdGVz",
+                "00000046241399pNYzQq!AAAAdGVz",
+                "00000046241399pssH.eFAAAAdGVz",
+                "00000046241399R?opj=OAAAAdGVz",
+                "00000046241399UgYyapnAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "0104660048360830212F.bquB8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399%cs!XFYAAAAdGVz",
+                "00000046241399(;uZMf\"AAAAdGVz",
+                "00000046241399_fx=SOjAAAAdGVz",
+                "00000046241399AwmZthlAAAAdGVz",
+                "00000046241399DDraWvGAAAAdGVz",
+                "00000046241399NX8MK>%AAAAdGVz",
+                "00000046241399RNMRJ6lAAAAdGVz",
+                "00000046241399SW:<HO<AAAAdGVz",
+                "00000046241399Ybzt)MbAAAAdGVz",
+                "00000046241399ZLU%vhKAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "0104660048360830214f3wS&s8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "000000462413994jN0Vj6AAAAdGVz",
+                "00000046241399aMhMGy3AAAAdGVz",
+                "00000046241399hfun0R:AAAAdGVz",
+                "00000046241399Km.rDiMAAAAdGVz",
+                "00000046241399ntGSDGVAAAAdGVz",
+                "00000046241399O>sBHZZAAAAdGVz",
+                "00000046241399of2DZhaAAAAdGVz",
+                "00000046241399pLTL9IDAAAAdGVz",
+                "00000046241399ucdK)vBAAAAdGVz",
+                "00000046241399zqO80XyAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "0104660048360830215+lorYm8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "000000462413994*vx6YTAAAAdGVz",
+                "00000046241399CnJwnWBAAAAdGVz",
+                "00000046241399cXMLdR)AAAAdGVz",
+                "00000046241399EIsgd8hAAAAdGVz",
+                "00000046241399EP3VhDkAAAAdGVz",
+                "00000046241399ll.gZ:MAAAAdGVz",
+                "00000046241399Ms*ItjdAAAAdGVz",
+                "00000046241399NG'-uMrAAAAdGVz",
+                "00000046241399PXuLQzGAAAAdGVz",
+                "00000046241399YlVS%&gAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "0104660048360830216pDAQTT8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399!)Q_8BQAAAAdGVz",
+                "00000046241399\"-tdRLCAAAAdGVz",
+                "00000046241399cLTTmm7AAAAdGVz",
+                "00000046241399cTLI4LTAAAAdGVz",
+                "00000046241399Ifgz4T0AAAAdGVz",
+                "00000046241399J%j.qCrAAAAdGVz",
+                "00000046241399LOdflzIAAAAdGVz",
+                "00000046241399u8EJI%OAAAAdGVz",
+                "00000046241399XODseQnAAAAdGVz",
+                "00000046241399YZvva?gAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021bmxpkQr8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399/H>F(O!AAAAdGVz",
+                "00000046241399g9HSBPqAAAAdGVz",
+                "00000046241399hPEbJ'?AAAAdGVz",
+                "00000046241399meAah2cAAAAdGVz",
+                "00000046241399mLm0ia&AAAAdGVz",
+                "00000046241399NPZbb1gAAAAdGVz",
+                "00000046241399nSgyb(xAAAAdGVz",
+                "00000046241399oqm%nV&AAAAdGVz",
+                "00000046241399Pq9A6M_AAAAdGVz",
+                "00000046241399WrLT3PkAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021E0Kc1ls8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399+bywVd+AAAAdGVz",
+                "00000046241399fumJmjcAAAAdGVz",
+                "00000046241399I+uv?HrAAAAdGVz",
+                "00000046241399j5c._aLAAAAdGVz",
+                "00000046241399JGHbjEEAAAAdGVz",
+                "00000046241399KJlCN7hAAAAdGVz",
+                "00000046241399QAYZIOEAAAAdGVz",
+                "00000046241399QviFk-ZAAAAdGVz",
+                "00000046241399VAQuIT:AAAAdGVz",
+                "00000046241399ZpM<AdbAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021ER*SNLx8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399)rqG.F'AAAAdGVz",
+                "00000046241399*OuyP3<AAAAdGVz",
+                "00000046241399bUWix!EAAAAdGVz",
+                "00000046241399dPP2GpTAAAAdGVz",
+                "00000046241399E'tXqcBAAAAdGVz",
+                "00000046241399J.p9V3TAAAAdGVz",
+                "00000046241399lbgQpM<AAAAdGVz",
+                "00000046241399nqTb'RzAAAAdGVz",
+                "00000046241399'nStq9VAAAAdGVz",
+                "00000046241399zwKIYRaAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021fbz,Fl,8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399?mCLp_nAAAAdGVz",
+                "00000046241399aF.2!LXAAAAdGVz",
+                "00000046241399-c?>i7VAAAAdGVz",
+                "00000046241399cYcjHvKAAAAdGVz",
+                "00000046241399EMmitkgAAAAdGVz",
+                "00000046241399mdVVmFdAAAAdGVz",
+                "00000046241399NQErOWhAAAAdGVz",
+                "00000046241399O0fFqp'AAAAdGVz",
+                "00000046241399rGpEqGwAAAAdGVz",
+                "00000046241399rsnLY?YAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021hnKG3Qt8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "000000462413997&tpF5WAAAAdGVz",
+                "000000462413999Xt0*oWAAAAdGVz",
+                "00000046241399faIeaUWAAAAdGVz",
+                "00000046241399L-+UHB\"AAAAdGVz",
+                "00000046241399LhAINfsAAAAdGVz",
+                "00000046241399oZJcD.hAAAAdGVz",
+                "00000046241399pa9hv;RAAAAdGVz",
+                "00000046241399rZnhe4SAAAAdGVz",
+                "00000046241399SlMJ)ePAAAAdGVz",
+                "00000046241399u+?QWT9AAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021ItdUiOB8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399*blTA*tAAAAdGVz",
+                "00000046241399:)5Y?OpAAAAdGVz",
+                "00000046241399Hb5ZzPFAAAAdGVz",
+                "00000046241399I'+9Eh8AAAAdGVz",
+                "00000046241399KG(NQDpAAAAdGVz",
+                "00000046241399kU?R'GHAAAAdGVz",
+                "00000046241399pSRpN?dAAAAdGVz",
+                "00000046241399qfEkhCkAAAAdGVz",
+                "00000046241399rkFI15PAAAAdGVz",
+                "00000046241399S+-GUTVAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021OuXDKCB8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399?ql/i9CAAAAdGVz",
+                "00000046241399<)%Ph:kAAAAdGVz",
+                "00000046241399>rH!TDMAAAAdGVz",
+                "00000046241399LBEt?heAAAAdGVz",
+                "00000046241399NHOx;.RAAAAdGVz",
+                "00000046241399O6Rm0hwAAAAdGVz",
+                "00000046241399pl6cS!NAAAAdGVz",
+                "00000046241399QSnN6HoAAAAdGVz",
+                "00000046241399U-RRlzDAAAAdGVz",
+                "00000046241399ZiueqQrAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021QefBkee8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399<jOP_*sAAAAdGVz",
+                "00000046241399aR&hFlhAAAAdGVz",
+                "00000046241399bQ?VTnOAAAAdGVz",
+                "00000046241399cMsjsTXAAAAdGVz",
+                "00000046241399eBQpp7oAAAAdGVz",
+                "00000046241399H>lmdXHAAAAdGVz",
+                "00000046241399oLAW/nzAAAAdGVz",
+                "00000046241399PqW0u1GAAAAdGVz",
+                "00000046241399rzETfCGAAAAdGVz",
+                "00000046241399Sb9nVggAAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021w&MGMU-8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "000000462413996o*3?XhAAAAdGVz",
+                "0000004624139970dAX9LAAAAdGVz",
+                "00000046241399AcSjSOgAAAAdGVz",
+                "00000046241399bAo4n3/AAAAdGVz",
+                "00000046241399bmogkKjAAAAdGVz",
+                "00000046241399e?1JURDAAAAdGVz",
+                "00000046241399m'JipA2AAAAdGVz",
+                "00000046241399moMko)vAAAAdGVz",
+                "00000046241399WsF=D3*AAAAdGVz",
+                "00000046241399ZMmc0a*AAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021Wr'ItNH8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399(u+h%UWAAAAdGVz",
+                "00000046241399.GZFHe2AAAAdGVz",
+                "000000462413996hMgNblAAAAdGVz",
+                "000000462413998Y+x1eBAAAAdGVz",
+                "00000046241399faasunGAAAAdGVz",
+                "00000046241399H1YYVDRAAAAdGVz",
+                "00000046241399HPgMgjpAAAAdGVz",
+                "00000046241399Mtt8bObAAAAdGVz",
+                "00000046241399ntj%nKaAAAAdGVz",
+                "00000046241399tIGQiA0AAAAdGVz"
+            ]
+        },
+        {
+            "unitSerialNumber": "010466004836083021Z/YjViR8005000000",
+            "aggregatedItemsCount": 10,
+            "aggregationType": "AGGREGATION",
+            "aggregationUnitCapacity": 10,
+            "sntins": [
+                "00000046241399%<_YhWFAAAAdGVz",
+                "00000046241399&lGtgUbAAAAdGVz",
+                "00000046241399<k;E+ebAAAAdGVz",
+                "00000046241399gsVOf7PAAAAdGVz",
+                "00000046241399HMHN3JbAAAAdGVz",
+                "00000046241399kl:HEt_AAAAdGVz",
+                "00000046241399nVZ4W/QAAAAdGVz",
+                "00000046241399RA5bmnpAAAAdGVz",
+                "00000046241399w<BcrUZAAAAdGVz",
+                "00000046241399WSqOP?FAAAAdGVz"
+            ]
+        }
+    ]
+}

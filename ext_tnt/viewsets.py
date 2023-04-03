@@ -30,7 +30,8 @@ class AggregationCreateModelViewSet(CreateModelMixin, GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         aggregation_uuid = uuid.uuid4()
-        request.data['aggregation_uuid'] = aggregation_uuid
+        # request.data['aggregation_uuid'] = aggregation_uuid
+        request.data['uuid'] = aggregation_uuid
         request.data['updatedBy'] = request.user.username
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

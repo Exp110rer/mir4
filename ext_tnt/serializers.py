@@ -23,8 +23,10 @@ class AggregationModelSerializer(serializers.ModelSerializer):
     aggregationUnits = UnitModelSerializer(many=True)
 
     def create(self, validated_data):
-        aggregation_uuid = self.initial_data['aggregation_uuid']
-        validated_data['uuid'] = aggregation_uuid
+        # aggregation_uuid = self.initial_data['aggregation_uuid']
+        # validated_data['uuid'] = aggregation_uuid
+        print(validated_data)
+        aggregation_uuid = validated_data['uuid']
         aggregationUnits = validated_data.pop('aggregationUnits')
         aggregation = Aggregation.objects.create(**validated_data)
         items = list()
@@ -40,4 +42,4 @@ class AggregationModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Aggregation
-        fields = ('participantId', 'productionLineId', 'sku', 'batch', 'aggregationUnits', 'updatedBy')
+        fields = ('participantId', 'productionLineId', 'productionOrderId', 'sku', 'batch', 'aggregationUnits', 'updatedBy', 'uuid')

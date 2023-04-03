@@ -14,7 +14,7 @@ class DateTimeModel(models.Model):
 class Aggregation(DateTimeModel):
     participantId = models.CharField(max_length=10)
     productionLineId = models.CharField(max_length=10)
-    productionOrderId = models.CharField(max_length=10, blank=True, null=True)
+    productionOrderId = models.CharField(max_length=20)
     sku = models.PositiveIntegerField()
     batch = models.CharField(max_length=10)
     uuid = models.UUIDField(db_index=True)
