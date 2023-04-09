@@ -1,8 +1,9 @@
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from hub_api.models import Order, Composition, Item
-from datetime import datetime, timedelta
+from hub_api.models import Order, Composition, Item, ProductCategory
+from mirusers.models import MirUser
+from datetime import datetime, timedelta, date
 import openpyxl
 from openpyxl.styles import Font
 import io
@@ -22,10 +23,40 @@ class OrderBCPListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 class OrderCSListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Order
     template_name = 'hub_portal/orders_cs.html'
-    queryset = Order.objects.filter(created__gt=datetime.now() - timedelta(days=200))
+    queryset = Order.objects.filter(created__gt=datetime.now() - timedelta(days=7))
 
     def test_func(self):
         return self.request.user.groups.filter(name='Orders_CS').exists()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        filter_date = self.request.GET.get('filter_date', None)
+        filter_productCategory = self.request.GET.get('filter_productCategory', 'ALL')
+        context = super().get_context_data()
+        context['product_categories'] = ProductCategory.objects.all()
+        context['filter_date'] = filter_date
+        context['filter_productCategory'] = filter_productCategory
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        f_date = request.GET.get('filter_date', None)
+        filter_date = datetime.strptime(f_date, "%Y-%m-%d") if f_date else None
+        filter_productCategory = request.GET.get('filter_productCategory', 'ALL')
+        if filter_date:
+            if filter_productCategory == 'ALL':
+                self.queryset = Order.objects.filter(created__gte=filter_date,
+                                                     created__lt=filter_date + timedelta(days=1))
+            else:
+                self.queryset = Order.objects.filter(created__gte=filter_date,
+                                                     created__lt=filter_date + timedelta(days=1),
+                                                     productCategory=filter_productCategory)
+        else:
+            if filter_productCategory != 'ALL':
+                self.queryset = Order.objects.filter(created__gt=datetime.now() - timedelta(days=7),
+                                                     productCategory=filter_productCategory)
+
+        print(request.GET)
+        print(filter_date)
+        return super().dispatch(request)
 
 
 class OrderBCPDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
@@ -40,7 +71,7 @@ class OrderBCPDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             wb.remove(wb['Sheet'])
         ws.column_dimensions['B'].width = 70
         ws.column_dimensions['C'].width = 35
-        items = Item.objects.filter(composition__order=order)
+        items = Item.objects.filter(composition__order=order, validity=1)
         ws.cell(row=1, column=2, value='gtin')
         ws.cell(row=1, column=3, value='sku')
         for data in enumerate(items, start=2):
@@ -92,7 +123,7 @@ class OrderCSDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                 amount_db = composition.amount
                 ws.cell(row=i, column=5, value=amount_calculated)
                 if amount_db != amount_calculated:
-                    ws.cell(row=i, column=6).font = Font(color='FF0000')
+                    ws.cell(row=i, column=5).font = Font(color='FF0000')
             else:
                 ws.cell(row=i, column=5, value=composition.amount)
             ws.cell(row=i, column=6, value=composition.unitOfMeasure)
@@ -101,8 +132,10 @@ class OrderCSDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
         file_obj = io.BytesIO()
         wb.save(file_obj)
-        buyoutDate = str(order.buyoutDate).replace('-','')
+        buyoutDate = str(order.buyoutDate).replace('-', '')
         file_name = f'filename="{order.order}_{order.hub.name}_Sales_{order.productCategory}_{buyoutDate}_{order.saleType}_{order.contractType}.xlsx"'
+        order.downloadedBy_id = request.user.id
+        order.save()
         return HttpResponse(file_obj.getvalue(), headers={'Content-Type': 'application/vnd.ms-excel',
                                                           'Content-Disposition': f"inline; {file_name}"})
 

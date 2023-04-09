@@ -1,7 +1,7 @@
 import datetime
 
 from rest_framework import serializers
-from hub_api.models import Order, Item, Composition
+from hub_api.models import Order, Item, Composition, ProductCategory
 from mirusers.models import Hub, MirUser
 
 
@@ -71,6 +71,17 @@ class OrderModelSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError('The date must not be in the past or today')
 
+    def validate_productCategory(self, value):
+        try:
+            productCategory = ProductCategory.objects.get(name=value)
+        except ProductCategory.DoesNotExist:
+            raise serializers.ValidationError('The specified productCategory does not exists.')
+        else:
+            if productCategory.traceability == 1:
+                return value
+            else:
+                raise serializers.ValidationError(f"Product category {value} is not traceable.")
+
     def create(self, validated_data):
         sPositionSet = validated_data.pop('sPositionSet')
         order = Order.objects.create(**validated_data)
@@ -120,6 +131,17 @@ class OrderNonTNTModelSerializer(serializers.ModelSerializer):
             return value
         else:
             raise serializers.ValidationError('The date must not be in the past or today')
+
+    def validate_productCategory(self, value):
+        try:
+            productCategory = ProductCategory.objects.get(name=value)
+        except ProductCategory.DoesNotExist:
+            raise serializers.ValidationError('The specified productCategory does not exists.')
+        else:
+            if productCategory.traceability == 0:
+                return value
+            else:
+                raise serializers.ValidationError(f"Product category {value} is traceable.")
 
     def create(self, validated_data):
         sPositionSet = validated_data.pop('sPositionSet')

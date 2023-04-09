@@ -7,7 +7,20 @@
     <link rel="stylesheet" href="{% static 'css/cs_table.css' %}" />
 </head>
 <body>
-<table>
+<div class="filter">
+    <form action="{% url 'hub_portal:orders_cs' %}" method="get">
+        <input name = "filter_date" type="date" value="{{ filter_date }}">
+        <select name="filter_productCategory" id="">
+                <option {% if filter_productCategory == 'ALL' %} selected {% endif %} value="ALL">ALL</option>
+            {% for product_category in product_categories %}
+                <option {% if filter_productCategory == product_category.name %} selected {% endif %} value="{{ product_category.name }}">{{ product_category.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Filter">
+    </form>
+</div>
+<div>
+    <table>
     <thead>
         <tr>
             <th colspan="2">Orders for SC</th>
@@ -20,9 +33,11 @@
             <th> Продажа/Возврат</th>
             <th> Тип стока </th>
             <th> Delivery Date </th>
-            <th> Sales type </th>
+            <th> Собственник </th>
+            <th> Тип стока</th>
             <th> Статус заказа </th>
             <th> xlxs link </th>
+            <th> Кто скачивал </th>
         </tr>
         {% for order in object_list %}
         <tr>
@@ -31,17 +46,21 @@
             <td>Продажа</td>
             <td> {{ order.productCategory }}</td>
             <td> {{ order.buyoutDate }} </td>
-            <td> {{ order.saleType}} </td>
+            <td> {% if order.saleType == 'RU12' %} БАТ {% else %} МУМТ {% endif %}</td>
+            <td> {% if order.contractType == 't' %} s {% elif order.contractType == 'c' %} k {% else %} na {% endif %}</td>
             {% if order.status == 2 %} <td> Проверка завершена </td>
             {% elif order.status == 1 %} <td> Проверяется ... </td>
             {% elif order.status == 0 %} <td> Не проверен </td>
+            {% elif order.status == 4 %} <td> ПОДОЗРЕНИЕ НА ОШИБКУ </td>
             {% endif %}
             {% if order.status == 2 %}
             <td><a href="{% url 'hub_portal:cs_excel' order.pk %}">{{ order.order }}</a></td>
             {% endif %}
+            <td>{{ order.downloadedBy.username }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+</div>
 </body>
 </html>

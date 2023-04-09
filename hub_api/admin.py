@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hub_api.models import Order, Item, Composition
+from hub_api.models import Order, Item, Composition, ProductCategory
 
 
 # Register your models here.
@@ -16,3 +16,8 @@ class ItemModelAdmin(admin.ModelAdmin):
 @admin.register(Composition)
 class SkuModelAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(ProductCategory)
+class ProductCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', 'traceability')
