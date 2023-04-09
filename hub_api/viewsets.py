@@ -164,19 +164,21 @@ class OrderForSputnikCodeValidityUpdateViewSet(CreateModelMixin, GenericViewSet)
                 except Order.DoesNotExist:
                     return Response({"status": f"order with ID {order_id} is not found"},
                                     status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-                for tuid, tuid_status in cisInfo.items():
-                    try:
-                        item = Item.objects.get(composition__order=order, tuid=tuid)
-                    except Item.DoesNotExist:
-                        return Response({"status": f"tuid {tuid} is not found in order {order.order}"},
-                                        status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-                    else:
-                        item.validity = 1 if tuid_status == 'OK' else 0
-                        items.append(item)
-                for i in items:
-                    print(i.validity)
-                Item.objects.bulk_update(items, fields=('validity',))
-                order.status = 2
+                sputnik_health_check = set(cisInfo.values())
+                if len(sputnik_health_check) == 1 and sputnik_health_check == {'NOK'}:
+                    order.status = 4
+                else:
+                    for tuid, tuid_status in cisInfo.items():
+                        try:
+                            item = Item.objects.get(composition__order=order, tuid=tuid)
+                        except Item.DoesNotExist:
+                            return Response({"status": f"tuid {tuid} is not found in order {order.order}"},
+                                            status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+                        else:
+                            item.validity = 1 if tuid_status == 'OK' else 0
+                            items.append(item)
+                    Item.objects.bulk_update(items, fields=('validity',))
+                    order.status = 2
                 order.save()
                 return Response(SUCCESS_RESPONSE, status=status.HTTP_200_OK)
             else:
