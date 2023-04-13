@@ -2,7 +2,7 @@ from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from hub_api.models import Order, Composition, Item, ProductCategory
-from mirusers.models import MirUser
+from mirusers.models import Hub
 from datetime import datetime, timedelta, date
 import openpyxl
 from openpyxl.styles import Font
@@ -23,7 +23,7 @@ class OrderBCPListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 class OrderCSListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Order
     template_name = 'hub_portal/orders_cs.html'
-    queryset = Order.objects.filter(created__gt=datetime.now() - timedelta(days=7))
+    # queryset = Order.objects.filter(buyoutDate__gte=datetime.now(), buyoutDate__lt=datetime.now() + timedelta(days=7))
 
     def test_func(self):
         return self.request.user.groups.filter(name='Orders_CS').exists()
@@ -31,31 +31,32 @@ class OrderCSListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         filter_date = self.request.GET.get('filter_date', None)
         filter_productCategory = self.request.GET.get('filter_productCategory', 'ALL')
+        filter_hub = self.request.GET.get('filter_hub', 'ALL')
         context = super().get_context_data()
         context['product_categories'] = ProductCategory.objects.all()
+        context['hubs'] = Hub.objects.filter(id__gt=1)
         context['filter_date'] = filter_date
         context['filter_productCategory'] = filter_productCategory
+        context['filter_hub'] = filter_hub
         return context
 
     def dispatch(self, request, *args, **kwargs):
         f_date = request.GET.get('filter_date', None)
         filter_date = datetime.strptime(f_date, "%Y-%m-%d") if f_date else None
         filter_productCategory = request.GET.get('filter_productCategory', 'ALL')
+        filter_hub = request.GET.get('filter_hub', 'ALL')
+        filter_query = dict()
         if filter_date:
-            if filter_productCategory == 'ALL':
-                self.queryset = Order.objects.filter(created__gte=filter_date,
-                                                     created__lt=filter_date + timedelta(days=1))
-            else:
-                self.queryset = Order.objects.filter(created__gte=filter_date,
-                                                     created__lt=filter_date + timedelta(days=1),
-                                                     productCategory=filter_productCategory)
+            filter_query['buyoutDate'] = filter_date
         else:
-            if filter_productCategory != 'ALL':
-                self.queryset = Order.objects.filter(created__gt=datetime.now() - timedelta(days=7),
-                                                     productCategory=filter_productCategory)
-
-        print(request.GET)
-        print(filter_date)
+            filter_query['buyoutDate__gte'] = datetime.now()
+            filter_query['buyoutDate__lt'] = datetime.now() + timedelta(days=14)
+        if filter_productCategory != 'ALL':
+            filter_query['productCategory'] = filter_productCategory
+        if filter_hub != 'ALL':
+            filter_query['hub__name'] = filter_hub
+        print("Filter query", filter_query)
+        self.queryset = Order.objects.filter(**filter_query).order_by('buyoutDate')
         return super().dispatch(request)
 
 
@@ -133,7 +134,11 @@ class OrderCSDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         file_obj = io.BytesIO()
         wb.save(file_obj)
         buyoutDate = str(order.buyoutDate).replace('-', '')
-        file_name = f'filename="{order.order}_{order.hub.name}_Sales_{order.productCategory}_{buyoutDate}_{order.saleType}_{order.contractType}.xlsx"'
+        if order.contractType == 't':
+            file_contact_type = 's'
+        elif order.contractType == 'c':
+            file_contact_type = 'k'
+        file_name = f'filename="{order.order}_{order.hub.name}_Sales_{order.productCategory}_{buyoutDate}_{order.saleType}_{file_contact_type}.xlsx"'
         order.downloadedBy_id = request.user.id
         order.save()
         return HttpResponse(file_obj.getvalue(), headers={'Content-Type': 'application/vnd.ms-excel',
