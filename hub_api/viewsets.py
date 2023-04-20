@@ -6,13 +6,14 @@ from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.authentication import BasicAuthentication
 from hub_api.models import Order, Item
 from hub_api.serializers import OrderModelSerializer, OrderNonTNTModelSerializer, OrderForSputnikListSerializer, \
-    OrderForSputnikUUIDUpdateSerializer, OrderValidationForSputnikRetrieveSerializer
+    OrderForSputnikUUIDUpdateSerializer, OrderValidationForSputnikRetrieveSerializer, OrderGetModelSerializer
 from rest_framework.serializers import ValidationError
 from django.shortcuts import get_object_or_404
 
 SUCCESS_RESPONSE = {"status": "processed"}
 FAILURE_RESPONSE = {"status": "error processing"}
 NO_PERMISSION_RESPONSE = {"details": "You do not have permission to perform this action."}
+ORDER_STATUS = {0: 'not verified', 1: 'verification is in progress', 4: 'Suspicious'}
 
 
 class OrderCreateModelViewSetSNS(CreateModelMixin, GenericViewSet):
@@ -80,6 +81,46 @@ class OrderCreateNonTNTModelViewSet(CreateModelMixin, GenericViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(SUCCESS_RESPONSE, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class OrderRetrieveNonERPModelViewSet(RetrieveModelMixin, GenericViewSet):
+    serializer_class = OrderGetModelSerializer
+    queryset = Order.objects.all()
+    permission_classes = [DjangoModelPermissions]
+    lookup_field = 'order'
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+
+        assert lookup_url_kwarg in self.kwargs, (
+                'Expected view %s to be called with a URL keyword argument '
+                'named "%s". Fix your URL conf, or set the `.lookup_field` '
+                'attribute on the view correctly.' %
+                (self.__class__.__name__, lookup_url_kwarg)
+        )
+
+        filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg],
+                         'saleType': self.request.GET.get('saleType', 'RU')}
+
+        obj = get_object_or_404(queryset, **filter_kwargs)
+
+        self.check_object_permissions(self.request, obj)
+
+        return obj
+
+    def retrieve(self, request, *args, **kwargs):
+        if request.user.groups.filter(name='HUB_Executives'):
+            instance = self.get_object()
+            if instance.status == 2:
+                serializer = self.get_serializer(instance)
+                return Response(serializer.data)
+            else:
+                return Response({"order": instance.order, "status": ORDER_STATUS[instance.status]},
+                                status.HTTP_202_ACCEPTED)
+        else:
+            return Response(NO_PERMISSION_RESPONSE, status.HTTP_403_FORBIDDEN)
 
 
 # section for codes validation via Sputnik

@@ -101,8 +101,7 @@ class OrderCSDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         ws = wb.create_sheet('')
         if "Sheet" in wb.sheetnames:
             wb.remove(wb['Sheet'])
-        values = ['Sold to Party',
-                  'PurchaseOrderNumber',
+        values = ['PurchaseOrderNumber',
                   'Delivery Date',
                   'Material',
                   'Quantity',
@@ -114,22 +113,22 @@ class OrderCSDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             ws.column_dimensions[chr(i + 64)].width = 20
         compositions = Composition.objects.filter(order=order)
         for i, composition in enumerate(compositions, start=2):
-            ws.cell(row=i, column=1, value=order.saleType)
-            ws.cell(row=i, column=2, value=order.order)
-            ws.cell(row=i, column=3, value=order.buyoutDate)
+            # ws.cell(row=i, column=1, value=order.saleType)
+            ws.cell(row=i, column=1, value=order.order)
+            ws.cell(row=i, column=2, value=order.buyoutDate)
             # ws.cell(row=i, column=3, value=f"{order.created.year}{order.created.month:02}{order.created.day:02}")
-            ws.cell(row=i, column=4, value=composition.sku)
+            ws.cell(row=i, column=3, value=composition.sku)
             if order.traceability:
                 amount_calculated = len(items.filter(composition=composition, validity=1))
                 amount_db = composition.amount
-                ws.cell(row=i, column=5, value=amount_calculated)
+                ws.cell(row=i, column=4, value=amount_calculated)
                 if amount_db != amount_calculated:
-                    ws.cell(row=i, column=5).font = Font(color='FF0000')
+                    ws.cell(row=i, column=4).font = Font(color='FF0000')
             else:
-                ws.cell(row=i, column=5, value=composition.amount)
-            ws.cell(row=i, column=6, value=composition.unitOfMeasure)
-            ws.cell(row=i, column=7, value="Dummy")
-            ws.cell(row=i, column=8, value=order.saleType)
+                ws.cell(row=i, column=4, value=composition.amount)
+            ws.cell(row=i, column=5, value=composition.unitOfMeasure)
+            ws.cell(row=i, column=6, value="Dummy")
+            ws.cell(row=i, column=7, value=order.saleType)
 
         file_obj = io.BytesIO()
         wb.save(file_obj)
