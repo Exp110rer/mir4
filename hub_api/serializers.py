@@ -16,6 +16,7 @@ def uid_normalization(uid, unitOfMeasure):
 
 # send order from HUBs for tracking prodict
 
+
 class ItemModelSerializer(serializers.ModelSerializer):
 
     def validate_uid(self, value):
@@ -158,7 +159,40 @@ class OrderNonTNTModelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# section for codes validation via Sputnik
+class ItemIsNotValidListSerializer(serializers.ListSerializer):
+    def to_representation(self, data):
+        data = data.filter(validity=0)
+        return super().to_representation(data)
+
+
+class ItemGetModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ('uid',)
+        list_serializer_class = ItemIsNotValidListSerializer
+
+
+class CompositionGetModelSerializer(serializers.ModelSerializer):
+    sUSNSet = ItemGetModelSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Composition
+        fields = ('sku', 'unitOfMeasure', 'sUSNSet')
+
+
+class OrderGetModelSerializer(serializers.ModelSerializer):
+    sPositionSet = CompositionGetModelSerializer(many=True, read_only=True)
+    hub = serializers.CharField()
+
+    def validate_hub(self, value):
+        return Hub.objects.get(id=value).name
+
+    class Meta:
+        model = Order
+        exclude = (
+            'id', 'validation_uuid', 'deleted', 'updatedBy', 'downloadedBy', 'itemsCount', 'partial', 'iteration')
+
+    # section for codes validation via Sputnik
 
 
 class OrderForSputnikListSerializer(serializers.ModelSerializer):
