@@ -16,6 +16,11 @@ def uid_normalization(uid, unitOfMeasure):
 
 # send order from HUBs for tracking prodict
 
+class ItemIsValidListSerializer(serializers.ListSerializer):
+    def to_representation(self, data):
+        data = data.filter(validity=2)
+        return super().to_representation(data)
+
 
 class ItemModelSerializer(serializers.ModelSerializer):
 
@@ -30,6 +35,7 @@ class ItemModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ('uid', 'sku', 'unitOfMeasure', 'batch')
+        list_serializer_class = ItemIsValidListSerializer
 
 
 class CompositionModelSerializer(serializers.ModelSerializer):
@@ -66,11 +72,11 @@ class OrderModelSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError('You seem to have duplicate codes in the order')
 
-    def validate_buyoutDate(self, value):
-        if value > datetime.date.today():
-            return value
-        else:
-            raise serializers.ValidationError('The date must not be in the past or today')
+    # def validate_buyoutDate(self, value):
+    #     if value > datetime.date.today():
+    #         return value
+    #     else:
+    #         raise serializers.ValidationError('The date must not be in the past or today')
 
     def validate_productCategory(self, value):
         try:
