@@ -116,7 +116,6 @@ class OrderCSDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             # ws.cell(row=i, column=1, value=order.saleType)
             ws.cell(row=i, column=1, value=order.order)
             ws.cell(row=i, column=2, value=order.buyoutDate)
-            # ws.cell(row=i, column=3, value=f"{order.created.year}{order.created.month:02}{order.created.day:02}")
             ws.cell(row=i, column=3, value=composition.sku)
             if order.traceability:
                 amount_calculated = len(items.filter(composition=composition, validity=1))
@@ -126,7 +125,12 @@ class OrderCSDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                     ws.cell(row=i, column=4).font = Font(color='FF0000')
             else:
                 ws.cell(row=i, column=4, value=composition.amount)
-            ws.cell(row=i, column=5, value=composition.unitOfMeasure)
+            if composition.unitOfMeasure == 'case':
+                ws.cell(row=i, column=5, value='CS')
+            elif composition.unitOfMeasure == 'out':
+                ws.cell(row=i, column=5, value='OUT')
+            else:
+                ws.cell(row=i, column=5, value='unknown')
             ws.cell(row=i, column=6, value="Dummy")
             ws.cell(row=i, column=7, value=order.saleType)
 

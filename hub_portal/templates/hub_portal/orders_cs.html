@@ -1,5 +1,5 @@
 {%  load static %}
-{%  load product_category_filter %}
+{%  load hub_portal_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,10 +55,10 @@
             <td class = "td_table" > --- {{ order.order }} --- </td>
             <td> {{ order.hub.erpname }} </td>
             <td>Продажа</td>
-            <td> {{ order.productCategory|category_name }}</td>
+            <td> {{ order.productCategory|product_category_name }}</td>
             <td> {{ order.buyoutDate|date:'d.m.Y' }} </td>
-            <td> {% if order.saleType == 'RU12' %} БАТ {% else %} МУМТ {% endif %}</td>
-            <td> {% if order.contractType == 't' %} s {% elif order.contractType == 'c' %} k {% else %} na {% endif %}</td>
+            <td> {{ order.saleType|order_sale_type }}</td>
+            <td> {{ order.contractType|order_contract_type }}</td>
             {% if order.status == 2 %} <td> Проверка завершена </td>
             {% elif order.status == 1 %} <td> Проверяется ... </td>
             {% elif order.status == 0 %} <td> Не проверен </td>

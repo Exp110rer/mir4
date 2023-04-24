@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
+import django.core.mail.backends.base
+
 import mir4.db_routers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -149,3 +151,11 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = 'mirusers.MirUser'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'iHUBzoen Inrormer'
+EMAIL_HOST = 'mail.ihubzone.ru'
+EMAIL_HOST_USER = 'informer@ihubzone.ru'
+EMAIL_HOST_PASSWORD = 'Iparol1'
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465

@@ -9,6 +9,7 @@ from hub_api.serializers import OrderModelSerializer, OrderNonTNTModelSerializer
     OrderForSputnikUUIDUpdateSerializer, OrderValidationForSputnikRetrieveSerializer, OrderGetModelSerializer
 from rest_framework.serializers import ValidationError
 from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
 
 SUCCESS_RESPONSE = {"status": "processed"}
 FAILURE_RESPONSE = {"status": "error processing"}
@@ -60,6 +61,7 @@ class OrderRetrieveModelViewSet(RetrieveModelMixin, GenericViewSet):
         return obj
 
     def retrieve(self, request, *args, **kwargs):
+        # send_mail('Subject', 'Message body', 'informer@ihubzone.ru', ['test@itms.ru'])
         if request.user.groups.filter(name='ERP_Executives').exists():
             return super().retrieve(request)
         else:
