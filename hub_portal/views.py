@@ -23,16 +23,24 @@ class OrderBCPListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 class OrderCSListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Order
     template_name = 'hub_portal/orders_cs.html'
+
     # queryset = Order.objects.filter(buyoutDate__gte=datetime.now(), buyoutDate__lt=datetime.now() + timedelta(days=7))
 
     def test_func(self):
-        return self.request.user.groups.filter(name='Orders_CS').exists()
+        return self.request.user.groups.filter(name='Orders_CS').exists() or self.request.user.groups.filter(
+            name='Orders_BCP').exists()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         filter_date = self.request.GET.get('filter_date', None)
         filter_productCategory = self.request.GET.get('filter_productCategory', 'ALL')
         filter_hub = self.request.GET.get('filter_hub', 'ALL')
         context = super().get_context_data()
+        if self.request.user.groups.filter(name='Orders_CS').exists():
+            context['user_group'] = 'CS'
+        elif self.request.user.groups.filter(name='Orders_BCP').exists():
+            context['user_group'] = 'BCP'
+        else:
+            context['user_group'] = 'NA'
         context['product_categories'] = ProductCategory.objects.all()
         context['hubs'] = Hub.objects.filter(id__gt=1)
         context['filter_date'] = filter_date
@@ -96,7 +104,6 @@ class OrderCSDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         order = Order.objects.get(id=pk)
         if order.status != 2:
             return self.handle_no_permission()
-        items = Item.objects.filter(composition__order=order)
         wb = openpyxl.Workbook()
         ws = wb.create_sheet('')
         if "Sheet" in wb.sheetnames:
@@ -112,28 +119,32 @@ class OrderCSDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             ws.cell(row=1, column=i, value=value)
             ws.column_dimensions[chr(i + 64)].width = 20
         compositions = Composition.objects.filter(order=order)
-        for i, composition in enumerate(compositions, start=2):
-            # ws.cell(row=i, column=1, value=order.saleType)
-            ws.cell(row=i, column=1, value=order.order)
-            ws.cell(row=i, column=2, value=order.buyoutDate)
-            ws.cell(row=i, column=3, value=composition.sku)
-            if order.traceability:
-                amount_calculated = len(items.filter(composition=composition, validity=1))
-                amount_db = composition.amount
-                ws.cell(row=i, column=4, value=amount_calculated)
-                if amount_db != amount_calculated:
-                    ws.cell(row=i, column=4).font = Font(color='FF0000')
-            else:
-                ws.cell(row=i, column=4, value=composition.amount)
-            if composition.unitOfMeasure == 'case':
-                ws.cell(row=i, column=5, value='CS')
-            elif composition.unitOfMeasure == 'out':
-                ws.cell(row=i, column=5, value='OUT')
-            else:
-                ws.cell(row=i, column=5, value='unknown')
-            ws.cell(row=i, column=6, value="Dummy")
-            ws.cell(row=i, column=7, value=order.saleType)
-
+        i = 2
+        for composition in compositions:
+            composition_items = Item.objects.filter(composition=composition)
+            composition_batches = set([item.batch for item in composition_items])
+            if not composition_batches: composition_batches = {None}
+            for composition_batch in composition_batches:
+                ws.cell(row=i, column=1, value=order.order)
+                ws.cell(row=i, column=2, value=order.buyoutDate)
+                ws.cell(row=i, column=3, value=composition.sku)
+                if order.traceability:
+                    initial_amount = len(composition_items.filter(batch=composition_batch))
+                    validated_amount = len(composition_items.filter(batch=composition_batch, validity=1))
+                    ws.cell(row=i, column=4, value=validated_amount)
+                    if initial_amount != validated_amount:
+                        ws.cell(row=i, column=4).font = Font(color='FF0000')
+                else:
+                    ws.cell(row=i, column=4, value=composition.amount)
+                if composition.unitOfMeasure == 'case':
+                    ws.cell(row=i, column=5, value='CS')
+                elif composition.unitOfMeasure == 'out':
+                    ws.cell(row=i, column=5, value='OUT')
+                else:
+                    ws.cell(row=i, column=5, value='Unknown')
+                ws.cell(row=i, column=6, value=composition_batch)
+                ws.cell(row=i, column=7, value=order.saleType)
+                i += 1
         file_obj = io.BytesIO()
         wb.save(file_obj)
         buyoutDate = str(order.buyoutDate).replace('-', '')

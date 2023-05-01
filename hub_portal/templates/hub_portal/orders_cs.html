@@ -47,8 +47,12 @@
             <th> Собственник </th>
             <th> Тип стока</th>
             <th> Статус заказа </th>
-            <th> xlxs link </th>
-            <th> Кто скачивал </th>
+            {% if user_group == 'CS' %}
+                <th> xlxs link </th>
+                <th> Кто скачивал </th>
+            {% elif user_group == 'BCP' %}
+                <th> uids link</th>
+            {% endif %}
         </tr>
         {% for order in object_list %}
         <tr>
@@ -65,9 +69,15 @@
             {% elif order.status == 4 %} <td> ПОДОЗРЕНИЕ НА ОШИБКУ </td>
             {% endif %}
             {% if order.status == 2 %}
-            <td><a href="{% url 'hub_portal:cs_excel' order.pk %}">{{ order.order }}</a></td>
-            {% endif %}
-            <td>{{ order.downloadedBy.username }}</td>
+                {% if user_group == 'CS' %}
+                    <td><a href="{% url 'hub_portal:cs_excel' order.pk %}">{{ order.order }}</a></td>
+                    <td>{{ order.downloadedBy.username }}</td>
+                {% elif user_group == 'BCP' %}
+                    {% if order.traceability == True %}
+                        <td><a href="{% url 'hub_portal:bcp_excel' order.pk%}">{{ order.order }}</a></td>
+                    {% endif %}
+                {% endif %}
+            {%  endif %}
         </tr>
         {% endfor %}
     </tbody>
