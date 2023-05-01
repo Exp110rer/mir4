@@ -18,7 +18,7 @@ def uid_normalization(uid, unitOfMeasure):
 
 class ItemIsValidListSerializer(serializers.ListSerializer):
     def to_representation(self, data):
-        data = data.filter(validity=2)
+        data = data.filter(validity=1)
         return super().to_representation(data)
 
 
@@ -133,11 +133,11 @@ class OrderNonTNTModelSerializer(serializers.ModelSerializer):
             else:
                 raise serializers.ValidationError('The specified hub does not match the sender.')
 
-    def validate_buyoutDate(self, value):
-        if value > datetime.date.today():
-            return value
-        else:
-            raise serializers.ValidationError('The date must not be in the past or today')
+    # def validate_buyoutDate(self, value):
+    #     if value > datetime.date.today():
+    #         return value
+    #     else:
+    #         raise serializers.ValidationError('The date must not be in the past or today')
 
     def validate_productCategory(self, value):
         try:

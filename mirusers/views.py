@@ -12,7 +12,7 @@ class MirUserLoginView(LoginView):
 
     def get_success_url(self):
         if self.request.user.groups.filter(name='Orders_BCP').exists():
-            return reverse_lazy('hub_portal:orders_bcp')
+            return reverse_lazy('hub_portal:orders_cs')
         elif self.request.user.groups.filter(name='Orders_CS').exists():
             return reverse_lazy('hub_portal:orders_cs')
         else:
