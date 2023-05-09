@@ -165,6 +165,31 @@ class OrderNonTNTModelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ItemGetERPModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ('tuid', 'unitOfMeasure', 'sku', 'batch')
+        list_serializer_class = ItemIsValidListSerializer
+
+
+class CompositionGetERPModelSerializer(serializers.ModelSerializer):
+    sUSNSet = ItemGetERPModelSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Composition
+        fields = ('sku', 'unitOfMeasure', 'sUSNSet')
+
+
+class OrderGetERPModelSerializer(serializers.ModelSerializer):
+    sPositionSet = CompositionGetERPModelSerializer(many=True, read_only=True)
+    hub = serializers.CharField()
+
+    class Meta:
+        model = Order
+        exclude = (
+            'id', 'validation_uuid', 'updatedBy', 'downloadedBy', 'itemsCount', 'partial', 'iteration')
+
+
 class ItemIsNotValidListSerializer(serializers.ListSerializer):
     def to_representation(self, data):
         data = data.filter(validity=0)
