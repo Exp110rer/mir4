@@ -43,7 +43,6 @@ class Order(DateTimeModel):
     class Meta:
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
-        unique_together = ('order', 'saleType')
 
 
 class Composition(DateTimeModel):

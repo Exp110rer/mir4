@@ -6,7 +6,8 @@ from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.authentication import BasicAuthentication
 from hub_api.models import Order, Item
 from hub_api.serializers import OrderModelSerializer, OrderNonTNTModelSerializer, OrderForSputnikListSerializer, \
-    OrderForSputnikUUIDUpdateSerializer, OrderValidationForSputnikRetrieveSerializer, OrderGetModelSerializer
+    OrderForSputnikUUIDUpdateSerializer, OrderValidationForSputnikRetrieveSerializer, OrderGetModelSerializer, \
+    OrderGetERPModelSerializer
 from rest_framework.serializers import ValidationError
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
@@ -33,11 +34,10 @@ class OrderCreateModelViewSetSNS(CreateModelMixin, GenericViewSet):
 
 
 class OrderRetrieveModelViewSet(RetrieveModelMixin, GenericViewSet):
-    serializer_class = OrderModelSerializer
+    serializer_class = OrderGetERPModelSerializer
     queryset = Order.objects.all()
     permission_classes = [DjangoModelPermissions]
     lookup_field = 'order'
-
 
     def get_object(self):
 
