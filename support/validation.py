@@ -9,10 +9,10 @@ DRIVE = 'c:\\'
 ROOT = 'RUTNT.apps'
 APP = 'VALIDATION'
 APP_VER = '1.0'
-URL = 'https://ihubzone.ru/hub_api/validation'
-# URL = 'http://127.0.0.1:8000/hub_api/validation'
-SPUTNIK_URL = 'https://sputnik.global.batgen.com/api/v1/Check/'
-# SPUTNIK_URL = 'https://sputnikdev.global.batgen.com/api/v1/Check/'
+# URL = 'https://ihubzone.ru/hub_api/validation'
+URL = 'http://127.0.0.1:8000/hub_api/validation'
+# SPUTNIK_URL = 'https://sputnik.global.batgen.com/api/v1/Check/'
+SPUTNIK_URL = 'https://sputnikdev.global.batgen.com/api/v1/Check/'
 
 
 def get_log_file():
@@ -125,8 +125,12 @@ def get_validation_from_sputnik(validation_uuid, order_id):
 def request_to_sputnik(orders_list):
     for order in orders_list:
         if order['validation_uuid'] is None:
+            write_log_file(LOG_FILE, f"START getting order {order['id']} details from iHUBzone.ru", 'toSPUTN:  INFO')
             data = get_order_details(order['id'])
+            write_log_file(LOG_FILE, f"END getting order {order['id']} details from iHUBzone.ru", 'toSPUTN:  INFO')
+            write_log_file(LOG_FILE, f"START sending order {order['id']} details to Sputnik", 'toSPUTN:  INFO')
             uuid = send_order_to_sputnik(data, order['id'])
+            write_log_file(LOG_FILE, f"END sending order {order['id']} details to Sputnik", 'toSPUTN:  INFO')
             if data and uuid:
                 update_order_uuid(order['id'], uuid)
             else:

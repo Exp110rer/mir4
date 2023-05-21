@@ -214,14 +214,19 @@ class CompositionGetModelSerializer(serializers.ModelSerializer):
 class OrderGetModelSerializer(serializers.ModelSerializer):
     sPositionSet = CompositionGetModelSerializer(many=True, read_only=True)
     hub = serializers.CharField()
+    ERPLockStatus = serializers.SerializerMethodField('partial_func')
 
-    def validate_hub(self, value):
-        return Hub.objects.get(id=value).name
+    def partial_func(self, obj):
+        if obj.partial is True:
+            return 'LOCKED'
+        else:
+            return 'OPEN'
 
     class Meta:
         model = Order
         exclude = (
-            'id', 'validation_uuid', 'deleted', 'updatedBy', 'downloadedBy', 'itemsCount', 'partial', 'iteration')
+            'id', 'validation_uuid', 'deleted', 'updatedBy', 'downloadedBy', 'itemsCount', 'iteration',)
+
 
     # section for codes validation via Sputnik
 

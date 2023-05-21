@@ -78,14 +78,18 @@ class OrderBCPDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         ws = wb.create_sheet('TDSheet', 0)
         if 'Sheet' in wb.sheetnames:
             wb.remove(wb['Sheet'])
-        ws.column_dimensions['B'].width = 70
-        ws.column_dimensions['C'].width = 35
+        ws.column_dimensions['B'].width = 50
+        ws.column_dimensions['C'].width = 25
+        ws.column_dimensions['D'].width = 10
         items = Item.objects.filter(composition__order=order, validity=1)
         ws.cell(row=1, column=2, value='gtin')
         ws.cell(row=1, column=3, value='sku')
+        ws.cell(row=1, column=4, value='batch')
         for data in enumerate(items, start=2):
             ws.cell(row=data[0], column=2, value=data[1].tuid)
             ws.cell(row=data[0], column=3, value=f"0000000000{data[1].sku}")
+            batch = f"{data[1].batch}" if data[1].batch else ''
+            ws.cell(row=data[0], column=4, value=batch)
         file_obj = io.BytesIO()
         wb.save(file_obj)
         file_name = f'filename="{order.order}.xlsx"'

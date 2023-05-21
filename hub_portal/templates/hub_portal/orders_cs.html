@@ -56,19 +56,15 @@
         </tr>
         {% for order in object_list %}
         <tr>
-            <td class = "td_table" > --- {{ order.order }} --- </td>
-            <td> {{ order.hub.erpname }} </td>
-            <td>Продажа</td>
-            <td> {{ order.productCategory|product_category_name }}</td>
-            <td> {{ order.buyoutDate|date:'d.m.Y' }} </td>
-            <td> {{ order.saleType|order_sale_type }}</td>
-            <td> {{ order.contractType|order_contract_type }}</td>
-            {% if order.status == 2 %} <td> Проверка завершена </td>
-            {% elif order.status == 1 %} <td> Проверяется ... </td>
-            {% elif order.status == 0 %} <td> Не проверен </td>
-            {% elif order.status == 4 %} <td> ПОДОЗРЕНИЕ НА ОШИБКУ </td>
-            {% endif %}
-            {% if order.status == 2 %}
+            <td class = "td_table {% if order.deleted == True %} td_deleted {% endif %}"> --- {{ order.order }} --- </td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.hub.erpname }} </td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}>Продажа</td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.productCategory|product_category_name }}</td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.buyoutDate|date:'d.m.Y' }} </td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.saleType|order_sale_type }}</td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.contractType|order_contract_type }}</td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.status|order_status }}</td>
+            {% if order.status == 2 and order.deleted == False %}
                 {% if user_group == 'CS' %}
                     <td><a href="{% url 'hub_portal:cs_excel' order.pk %}">{{ order.order }}</a></td>
                     <td>{{ order.downloadedBy.username }}</td>

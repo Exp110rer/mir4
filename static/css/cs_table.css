@@ -22,3 +22,8 @@ th{
     font-size: small;
     color: gray;
 }
+
+.td_deleted{
+    color: red;
+    text-decoration: line-through;
+}
