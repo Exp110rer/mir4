@@ -147,13 +147,13 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.SlidingToken',),
     'AUTH_HEADER_TYPES': ('HubToken',),
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=10),
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=1000),
 }
 
 AUTH_USER_MODEL = 'mirusers.MirUser'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = 'iHUBzoen Inrormer'
+DEFAULT_FROM_EMAIL = 'iHUBzoen Informer'
 EMAIL_HOST = 'mail.ihubzone.ru'
 EMAIL_HOST_USER = 'informer@ihubzone.ru'
 EMAIL_HOST_PASSWORD = 'Iparol1'
