@@ -1,26 +1,30 @@
-from django.core.mail import send_mail
+from django.core.mail import send_mail, send_mass_mail
 from mirusers.models import MirUser
+from hub_api.models import Order
 
-
-email_list_cs = [user.email for user in MirUser.objects.filter(groups__name='Orders_CS')]
+email_sender = 'informer@ihubzone.ru'
 
 
 def ihubzone_send_mail(instance, status):
-    if status == 'validated':
-        subject = f"Order # {instance.order} VALIDATED"
-        message = f"Order # {instance.order} has been validated.\nStatus: {instance.status}"
-    elif status == 'deleted':
-        subject = f"Order # {instance.order} DELETED"
-        message = f"Order # {instance.order} has been deleted."
-    elif status == 'received':
-        subject = f"Order # {instance['order']} RECEIVED"
-        message = f"Order # {instance['order']} has been received."
-    else:
-        subject = 'Subject'
-        message = 'Message'
+    email_list_cs = [user.email for user in MirUser.objects.filter(groups__name='Orders_CS')]
+    emails = list()
+    base_subject = f"{instance.order} # {instance.hub.erpname} {instance.productCategory} {instance.buyoutDate}"
+    message = f"Order #                    {instance.order}\nHUB                          {instance.hub.erpname}\nProduct Category   {instance.productCategory}\nDelivery date          {instance.buyoutDate}\nOwner                      {instance.saleType}\nCreated                    {instance.created}"
+    for item in email_list_cs:
+        if status == 'validated':
+            subject = f" {base_subject} VALIDATED"
+        elif status == 'deleted':
+            subject = f" {base_subject} DELETED"
+        elif status == 'received':
+            # subject = f"Order # {instance['order']} RECEIVED"
+            subject = f" {base_subject} RECEIVED"
+        else:
+            subject = 'Subject'
+            message = 'Message'
+        emails.append((subject, message, email_sender, (item,)))
     try:
-        send_mail(subject, message, email_sender, email_list_cs)
-    except Exception:
+        send_mass_mail(tuple(emails))
+    except Exception as Exp:
         pass
 
 # def field_required_response(field_name):

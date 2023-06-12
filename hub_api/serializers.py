@@ -2,6 +2,7 @@ import datetime
 
 from rest_framework import serializers
 from hub_api.models import Order, Item, Composition, ProductCategory
+from hub_gtd.models import Item as GTD_Item, SKU
 from mirusers.models import Hub, MirUser
 
 
@@ -12,6 +13,11 @@ def uid_normalization(uid, unitOfMeasure):
         return f"{uid[:25]}"
     else:
         return uid
+
+
+def gtd_update(item: GTD_Item, gtd_tuids_gtds):
+    item.gtd = gtd_tuids_gtds.get(item.tuid)
+    return item
 
 
 # send order from HUBs for tracking prodict
@@ -93,16 +99,24 @@ class OrderModelSerializer(serializers.ModelSerializer):
         sPositionSet = validated_data.pop('sPositionSet')
         order = Order.objects.create(**validated_data)
         items = list()
+        gtd_skus = [sku.sku for sku in SKU.objects.all()]
+        print(gtd_skus)
         for position in sPositionSet:
             sUSNSet = position.pop('sUSNSet')
             if position['amount'] != len(sUSNSet):
                 order.delete()
                 raise serializers.ValidationError('The amount does not match the number of items')
             composition = Composition.objects.create(order=order, **position)
+            items_set = list()
             for usnset in sUSNSet:
-                item = Item(composition=composition, tuid=uid_normalization(usnset['uid'], usnset['unitOfMeasure']),
-                            **usnset)
-                items.append(item)
+                tuid = uid_normalization(usnset['uid'], usnset['unitOfMeasure'])
+                item = Item(composition=composition, tuid=tuid, **usnset)
+                items_set.append(item)
+            if position['sku'] in gtd_skus:
+                gtd_tuids = [item.tuid for item in items_set]
+                gtd_tuids_gtds = {item.tuid: item.gtd.gtd for item in GTD_Item.objects.filter(tuid__in=gtd_tuids)}
+                items_set = [gtd_update(item_set, gtd_tuids_gtds) for item_set in items_set]
+            items.extend(items_set)
         Item.objects.bulk_create(items)
         return order
 
@@ -168,7 +182,7 @@ class OrderNonTNTModelSerializer(serializers.ModelSerializer):
 class ItemGetERPModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ('tuid', 'unitOfMeasure', 'sku', 'batch')
+        fields = ('tuid', 'unitOfMeasure', 'sku', 'batch', 'gtd')
         list_serializer_class = ItemIsValidListSerializer
 
 
@@ -226,7 +240,6 @@ class OrderGetModelSerializer(serializers.ModelSerializer):
         model = Order
         exclude = (
             'id', 'validation_uuid', 'deleted', 'updatedBy', 'downloadedBy', 'itemsCount', 'iteration',)
-
 
     # section for codes validation via Sputnik
 

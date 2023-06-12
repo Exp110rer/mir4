@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from mirusers.models import Hub
 
+
 UOM_CHOICES = [('case', 'mastercase'), ('out', 'outer')]
 OPERATION_TYPE_CHOICES = [('RU12', 'SPB_to_ITMS'), ('RU14', 'ITMS_to_SNS')]
 CONTRACT_TYPE_CHOICES = [('t', 'Traditional'), ('c', 'Consignment')]
@@ -63,6 +64,7 @@ class Composition(DateTimeModel):
 class Item(DateTimeModel):
     uid = models.CharField(max_length=70, verbose_name='Item uniques id')
     tuid = models.CharField(max_length=70, verbose_name='Tracking code', db_index=True)
+    gtd = models.CharField(max_length=50, verbose_name='Customs declaration number', null=True, blank=True)
     validity = models.SmallIntegerField(default=0, verbose_name='Item verification status')
     unitOfMeasure = models.CharField(max_length=10, verbose_name='Item Unit of measure', choices=UOM_CHOICES)
     sku = models.PositiveIntegerField(verbose_name='SKU number')
