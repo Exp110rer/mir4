@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'mirusers',
     'hub_api',
+    'hub_gtd',
     'hub_portal',
-    'ext_tnt'
+    'ext_tnt',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +85,16 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'u1919191_ihubzone',
+        'USER': 'u1919191_service',
+        'PASSWORD': 'Yjdsqlj[jl2023',
+        'HOST': 'localhost',
+        'OPTIONS': {
+            "init_command": "SET foreign_key_checks = 0;",
+        },
+    },
+    'hub_gtd': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'u1919191_hub_gtd',
         'USER': 'u1919191_service',
         'PASSWORD': 'Yjdsqlj[jl2023',
         'HOST': 'localhost',
@@ -166,7 +177,7 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'mirusers.MirUser'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = 'iHUBzoen Inrormer'
+DEFAULT_FROM_EMAIL = 'iHUBzone Inrormer'
 EMAIL_HOST = 'mail.ihubzone.ru'
 EMAIL_HOST_USER = 'informer@ihubzone.ru'
 EMAIL_HOST_PASSWORD = 'Iparol1'

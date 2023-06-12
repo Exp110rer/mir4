@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'mirusers',
     'hub_api',
+    'hub_gtd',
     'hub_portal',
     'ext_tnt',
 ]
@@ -85,6 +86,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'hub_gtd': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'hub_gtd.sqlite3',
     },
     'ext_tnt': {
         'ENGINE': 'django.db.backends.sqlite3',

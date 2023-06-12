@@ -20,6 +20,7 @@ from django.views.generic import RedirectView, TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hub_api/', include('hub_api.urls', namespace='hub_api')),
+    path('hub_gtd/', include('hub_gtd.urls', namespace='hub_gtd')),
     path('hub_portal/', include('hub_portal.urls', namespace='hub_portal')),
     path('ext_tnt/', include('ext_tnt.urls', namespace='ext_tnt')),
     path('accounts/', include('mirusers.urls', namespace='mirusers')),

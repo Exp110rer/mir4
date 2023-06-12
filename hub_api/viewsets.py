@@ -93,9 +93,11 @@ class OrderCreateNonTNTModelViewSet(CreateModelMixin, GenericViewSet):
         data['traceability'] = False
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        # self.perform_create(serializer)
+        order = serializer.save()
+        print('TEST', order)
         headers = self.get_success_headers(serializer.data)
-        ihubzone_send_mail(serializer.data, status='received')
+        ihubzone_send_mail(order, status='received')
         return Response(SUCCESS_RESPONSE, status=status.HTTP_201_CREATED, headers=headers)
 
 
