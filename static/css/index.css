@@ -1,0 +1,25 @@
+@charset "utf-8";
+
+* {box-sizing: border-box;}
+body {
+	margin-left: 80px;
+	margin-top: 60px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+}
+.header {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+	padding-left: 2px;
+	margin-bottom: 10px;
+}
+.header span {
+	font-family: Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", monospace;
+	font-size: 32px;
+	font-weight: 400;
+	color: #000;
+	margin-left: 5px;
+}

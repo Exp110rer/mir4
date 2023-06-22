@@ -1,0 +1,97 @@
+{%  load static %}
+{% load hub_portal_filters %}
+
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="{% static 'images/favicon.svg' %}" type="image/x-icon">
+  <title>iHUBzone Orders</title>
+  <link href="{% static 'css/orders.css' %}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="header"><img src="{% static 'images/ihubzone.svg' %}" alt="" height="30" /><span>iHUBzone</span></div>
+  <div class="header_user"><span>{{ user.username }}</span><br><a href="{% url 'mirusers:logout' %}">logout</a></div>
+
+  <form action="{% url 'hub_portal:orders_cs' %}" method="get">
+    <div class="title">
+      <div class="item">
+        <label for="filter_date">Delivery date</label><br>
+        <input id="delivery_date" name="filter_date" type="date" value="{{ filter_date }}">
+      </div>
+
+      <div class="item">
+        <label for="filter_productCategory">Product category</label><br>
+        <select name="filter_productCategory" id="">
+                <option {% if filter_productCategory == 'ALL' %} selected {% endif %} value="ALL">ALL</option>
+            {% for product_category in product_categories %}
+                <option {% if filter_productCategory == product_category.name %} selected {% endif %} value="{{ product_category.name }}">{{ product_category.description }}</option>
+            {% endfor %}
+        </select>
+      </div>
+
+      <div class="item">
+        <label for="filter_hub">Hub</label><br>
+        <select name="filter_hub" id="">
+                <option {% if filter_hub == 'ALL' %} selected {% endif %} value="ALL">ALL</option>
+            {% for hub in hubs %}
+                <option {% if filter_hub == hub.name %} selected {% endif %} value="{{ hub.name }}">{{ hub.erpname }}</option>
+            {% endfor %}
+        </select>
+      </div>
+
+      <div class="item"><input class="button" type="submit" value="ПОКАЗАТЬ"></div>
+    </div>
+  </form>
+
+  <div class="footer"><span>powered by</span><a href="https://rikitlab.com" target="_blank"><img
+        src="{% static 'images/rikitlab.svg' %}" alt="" height="30" /></a></div>
+
+  <table align="center" cellpadding="5" cellspacing="0">
+    <tbody>
+      <tr>
+        <th>№ Заказа</th>
+        <th align="left">Хаб</th>
+        <th align="left">Продажа/Возврат</th>
+        <th align="left">Тип стока</th>
+        <th align="left">Delivery Date</th>
+        <th align="left">Собственник</th>
+        <th align="left">Тип стока</th>
+        <th align="left">Статус заказа</th>
+        {% if user_group == 'CS' %}
+            <th align="left">xlsx link</th>
+            <th align="left" class="td_end">Кто скачивал</th>
+        {% elif user_group == 'BCP' %}
+            <th align="left">uids link</th>
+        {% endif %}
+      </tr>
+              {% for order in object_list %}
+      <tr>
+            <td class = "td_numm {% if order.deleted == True %} td_deleted {% endif %}">{{ order.order }}</td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.hub.erpname }} </td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}>Продажа</td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.productCategory|product_category_name }}</td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.buyoutDate|date:'d.m.Y' }} </td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.saleType|order_sale_type }}</td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.contractType|order_contract_type }}</td>
+            <td {% if order.deleted == True %} class = "td_deleted" {% endif %}> {{ order.status|order_status }}</td>
+            {% if order.status == 2 and order.deleted == False %}
+                {% if user_group == 'CS' %}
+                    <td><a href="{% url 'hub_portal:cs_excel' order.pk %}">{{ order.order }}</a></td>
+                    <td>{{ order.downloadedBy.username }}</td>
+                {% elif user_group == 'BCP' %}
+                    {% if order.traceability == True %}
+                        <td><a href="{% url 'hub_portal:bcp_excel' order.pk%}">{{ order.order }}</a></td>
+                    {% endif %}
+                {% endif %}
+            {%  endif %}
+      </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+</body>
+
+</html>

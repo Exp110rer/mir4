@@ -1,29 +1,45 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Login form</title>
+  <meta charset="utf-8">
+  <link rel="icon" href="{% static 'images/favicon.svg' %}" type="image/x-icon">
+  <title>iHUBzone Authorization</title>
+  <link href="{% static 'css/login.css' %}" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
-    <h1>Login form</h1>
+  <div class="parent">
     <form action="{% url 'mirusers:login' %}" method="POST">
-    {% csrf_token %}
-        <table>
-        <tr>
-            <td>{{ form.username.label_tag }}</td>
-            <td>{{ form.username }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.password.label_tag }}</td>
-            <td>{{ form.password }}</td>
-        </tr>
-        </table>
-        <br>
-        <input type="submit" value="login">
-        <br>
-        {% if form.errors %}
-            {{ form.errors }}
-        {% endif %}
+      {%  csrf_token %}
+      <input type="hidden" name="" value="">
+      <div class="form">
+        <div class="header"><img src="{% static 'images/ihubzone.svg' %}" alt="" height="40" /><span>iHUBzone</span></div>
+        <div class="item">
+          <img src="{% static 'images/uname.svg' %}" alt="" height="24" />
+          <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150"
+            required="" id="id_username" placeholder="Username">
+        </div>
+        <div class="item">
+          <img src="{% static 'images/pass.svg' %}" alt="" height="24" />
+          <input type="password" name="password" autocomplete="current-password" required="" id="id_password"
+            placeholder="Password">
+        </div>
+        <input class="button" type="submit" value="LOGIN">
+          {%  if form.errors %}
+              {{ form.errors }}
+          {% endif %}
+      </div>
     </form>
+    <div class="footer">
+      <span>powered by</span>
+      <a href="https://rikitlab.com" target="_blank"><img src="{% static 'images/rikitlab.svg' %}" alt="" height="30" /></a>
+    </div>
+  </div>
 </body>
+
 </html>

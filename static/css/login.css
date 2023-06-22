@@ -1,0 +1,111 @@
+@charset "utf-8";
+* {box-sizing: border-box;}
+input::-webkit-input-placeholder {
+	font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+	font-size: 12px;
+	color: #aaa;
+}
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.parent {
+	background: url('../images/main_bg.png') top center/cover no-repeat;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #F8F8F8;
+}
+.parent .form {
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: column;
+	align-items: center;
+	width: 400px;
+	background-color: #fff;
+	padding: 30px 40px 40px 40px;
+	border-radius: 20px;
+	border: 1px solid #ddd;
+    box-shadow: 0 0 5px #CCCCCC;
+	margin-top: 30%;
+}
+.header {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+	padding-left: 2px;
+	margin-bottom: 10px;
+}
+.header span {
+	font-family: Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", monospace;
+	font-size: 32px;
+	font-weight: 400;
+	color: #000;
+	margin-left: 5px;
+}
+.item {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	background-color: #eee;
+	padding: 5px 10px;
+	border-radius: 15px;
+	margin-top: 10px;
+	width: 100%;
+}
+.item img {
+	opacity: 0.5;
+	margin-right: 10px;
+}
+.item input {
+	font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+	font-size: 14px;
+	color: #333333;
+	border: none;
+	background-color: transparent;
+	padding: 5px;
+	outline: none;
+	width: 100%;
+}
+.button {
+	font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+	font-size: 12px;
+	border: 1px solid #4A76A8;
+	letter-spacing: 0.05em;
+	color: #F8F8F8;
+	padding: 7px 10px 8px 10px;
+	border-radius: 10px;
+	background-color: #48855D;
+	cursor: pointer;
+	margin-top: 20px;
+	width: 100%;
+	outline: none;
+}
+.button:hover {
+	opacity: 0.8;
+}
+.footer {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	z-index: 99;
+	padding: 10px 20px;
+}
+.footer span {
+	font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+	font-size: 12px;
+	width: 100%;
+	color: #999;
+	margin-right: 7px;
+}

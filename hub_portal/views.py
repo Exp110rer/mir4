@@ -22,7 +22,7 @@ class OrderBCPListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
 class OrderCSListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Order
-    template_name = 'hub_portal/orders_cs.html'
+    template_name = 'hub_portal/orders.html'
 
     # queryset = Order.objects.filter(buyoutDate__gte=datetime.now(), buyoutDate__lt=datetime.now() + timedelta(days=7))
 

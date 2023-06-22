@@ -22,4 +22,4 @@ class MirUserLoginView(LoginView):
 
 
 class MirUserLogoutView(LogoutView):
-    next_page = reverse_lazy('main')
+    next_page = reverse_lazy('mirusers:login')
