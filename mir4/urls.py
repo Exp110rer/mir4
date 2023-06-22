@@ -24,6 +24,6 @@ urlpatterns = [
     path('hub_portal/', include('hub_portal.urls', namespace='hub_portal')),
     path('ext_tnt/', include('ext_tnt.urls', namespace='ext_tnt')),
     path('accounts/', include('mirusers.urls', namespace='mirusers')),
-    path('', TemplateView.as_view(template_name='hub_api/index.html'), name='main'),
-    # path('', RedirectView.as_view(url='/hub_api/'))
+    # path('', TemplateView.as_view(template_name='hub_api/index.html'), name='main'),
+    path('', RedirectView.as_view(url='/accounts/login'))
 ]
