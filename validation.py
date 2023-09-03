@@ -9,10 +9,11 @@ DRIVE = 'c:\\'
 ROOT = 'RUTNT.apps'
 APP = 'VALIDATION'
 APP_VER = '1.0'
-URL = 'https://ihubzone.ru/hub_api/validation'
-# URL = 'http://127.0.0.1:8000/hub_api/validation'
+# URL = 'https://ihubzone.ru/hub_api/validation'
+URL = 'http://127.0.0.1:8000/hub_api/validation'
 # SPUTNIK_URL = 'https://sputnik.global.batgen.com/api/v1/Check/'
-SPUTNIK_URL = 'https://sputnikdev.global.batgen.com/api/v1/Check/'
+# SPUTNIK_URL = 'https://sputnikdev.global.batgen.com/api/v1/Check/'
+SPUTNIK_URL = 'https://10.100.148.38/api/v1/Check'
 
 
 def get_log_file():
@@ -66,7 +67,7 @@ def get_order_details(order_id):
 def update_order_uuid(order_id, validation_uuid):
     try:
         req = request(method='put', url=f'{URL}/uuidupdate/{order_id}/', auth=AUTH,
-                      json={'validation_uuid': validation_uuid})
+                      json={'validation_uuid': validation_uuid}, verify=False)
     except Exception as error:
         write_log_file(LOG_FILE, error, 'UUID_UPD: ERROR')
         return None
@@ -81,7 +82,7 @@ def update_order_uuid(order_id, validation_uuid):
 
 def validation_order_update(order_id, data):
     try:
-        req = request(method='post', url=f'{URL}/valupdate/', auth=AUTH, json=data)
+        req = request(method='post', url=f'{URL}/valupdate/', auth=AUTH, json=data, verify=False)
     except Exception as error:
         write_log_file(LOG_FILE, error, 'VAL_UPD:  ERROR')
         return None
@@ -108,7 +109,7 @@ def send_order_to_sputnik(data, order_id):
 def get_validation_from_sputnik(validation_uuid, order_id):
     try:
         write_log_file(LOG_FILE, f"Validation check to Sputnik sent for order_id {order_id}", 'frCHECK:  OK')
-        req = request(method='get', url=f"{SPUTNIK_URL}{validation_uuid}", verify=False)
+        req = request(method='get', url=f"{SPUTNIK_URL}/{validation_uuid}", verify=False)
     except Exception as error:
         write_log_file(LOG_FILE, error, 'frCHECK:  ERROR')
         return None

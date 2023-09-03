@@ -63,7 +63,6 @@ class OrderCSListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
             filter_query['productCategory'] = filter_productCategory
         if filter_hub != 'ALL':
             filter_query['hub__name'] = filter_hub
-        print("Filter query", filter_query)
         self.queryset = Order.objects.filter(**filter_query).order_by('buyoutDate')
         return super().dispatch(request)
 

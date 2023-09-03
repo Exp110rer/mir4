@@ -40,6 +40,9 @@ td {
 	color: #D5604F;
 	text-decoration: line-through;
 }
+.td_suspicious {
+	color: orange;
+}
 .td_numm {
 	font-weight: bold;
 	font-size: 18px;

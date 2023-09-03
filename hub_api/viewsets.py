@@ -280,10 +280,16 @@ class OrderForSputnikCodeValidityUpdateViewSet(CreateModelMixin, GenericViewSet)
                             item.validity = 1 if tuid_status == 'OK' else 0
                             items.append(item)
                     Item.objects.bulk_update(items, fields=('validity',))
+                    items_valid = len([item for item in items if item.validity])
+                    if len(items) != items_valid:
+                        order.itemsCount = 1
                     order.status = 2
                     # send mail
                 order.save()
-                ihubzone_send_mail(order, status='validated')
+                if order.itemsCount == 1:
+                    ihubzone_send_mail(order, status='validated_warning')
+                else:
+                    ihubzone_send_mail(order, status='validated')
                 return Response(SUCCESS_RESPONSE, status=status.HTTP_200_OK)
             else:
                 return Response(FAILURE_RESPONSE, status=status.HTTP_400_BAD_REQUEST)
