@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
+import django.core.mail.backends.base
 
 import mir4.db_routers
 
@@ -26,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-oo8)z!f*0xjoz37zumz3a$w=hkdzoo#d61%1e1s=^6$ge6uzyo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['ihubzone.ru', 'www.ihubzone.ru', '127.0.0.1']
 
@@ -83,34 +84,16 @@ WSGI_APPLICATION = 'mir4.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u1919191_ihubzone',
-        'USER': 'u1919191_service',
-        'PASSWORD': 'Yjdsqlj[jl2023',
-        'HOST': 'localhost',
-        'OPTIONS': {
-            "init_command": "SET foreign_key_checks = 0;",
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     },
     'hub_gtd': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u1919191_hub_gtd',
-        'USER': 'u1919191_service',
-        'PASSWORD': 'Yjdsqlj[jl2023',
-        'HOST': 'localhost',
-        'OPTIONS': {
-            "init_command": "SET foreign_key_checks = 0;",
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'hub_gtd.sqlite3',
     },
     'ext_tnt': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u1919191_ext_tnt',
-        'USER': 'u1919191_service',
-        'PASSWORD': 'Yjdsqlj[jl2023',
-        'HOST': 'localhost',
-        'OPTIONS': {
-            "init_command": "SET foreign_key_checks = 0;",
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'smoore.sqlite3',
     }
 }
 
@@ -148,10 +131,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-
-STATIC_URL = '/static/'
-STATIC_ROOT = 'static/'
-
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -171,15 +152,15 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.SlidingToken',),
     'AUTH_HEADER_TYPES': ('HubToken',),
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=10),
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=1000),
 }
 
 AUTH_USER_MODEL = 'mirusers.MirUser'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = 'iHUBzone Inrormer'
-EMAIL_HOST = 'mail.ihubzone.ru'
-EMAIL_HOST_USER = 'informer@ihubzone.ru'
-EMAIL_HOST_PASSWORD = 'Iparol1'
+EMAIL_HOST = 'mail.ihub.com'
+EMAIL_HOST_USER = 'informer@ihub.com'
+EMAIL_HOST_PASSWORD = 'Gfhjkmxbr'
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465

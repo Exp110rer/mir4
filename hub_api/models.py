@@ -46,6 +46,13 @@ class Order(DateTimeModel):
         verbose_name_plural = 'Orders'
         unique_together = ('order', 'saleType')
 
+    def get_status(self):
+        compositions = [composition.id for composition in Composition.objects.filter(order_id=self.id)]
+        items = Item.objects.filter(composition_id__in=compositions)
+        items_total = items.count()
+        items_valid = items.filter(validity=True).count()
+        return items_total, items_valid
+
 
 class Composition(DateTimeModel):
     sku = models.PositiveIntegerField(verbose_name='SKU number')

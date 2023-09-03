@@ -1,2 +1,0 @@
-from django.db.migrations.recorder import MigrationRecorder
-MigrationRecorder.Migration.objects.all().delete()

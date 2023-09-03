@@ -16,8 +16,9 @@ def ihubzone_send_mail(instance, status):
         elif status == 'deleted':
             subject = f" {base_subject} DELETED"
         elif status == 'received':
-            # subject = f"Order # {instance['order']} RECEIVED"
             subject = f" {base_subject} RECEIVED"
+        elif status == 'validated_warning':
+            subject == f"{base_subject} WARNING VALIDATED"
         else:
             subject = 'Subject'
             message = 'Message'
