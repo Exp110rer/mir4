@@ -2,10 +2,10 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from mirusers.models import Hub
 
-
 UOM_CHOICES = [('case', 'mastercase'), ('out', 'outer')]
 OPERATION_TYPE_CHOICES = [('RU12', 'SPB_to_ITMS'), ('RU14', 'ITMS_to_SNS')]
 CONTRACT_TYPE_CHOICES = [('t', 'Traditional'), ('c', 'Consignment')]
+PROCESSING_CHOICES = [('OK', 'Processed'), ('NOK', 'Error processing')]
 
 
 class ProductCategory(models.Model):
@@ -24,6 +24,7 @@ class DateTimeModel(models.Model):
 
 class Order(DateTimeModel):
     order = models.CharField(max_length=10, verbose_name='Order number', db_index=True)
+    customerOrderNumber = models.CharField(max_length=10, verbose_name='Customer Order number')
     hub = models.ForeignKey(Hub, on_delete=models.CASCADE, verbose_name='Shipped from location')
     saleType = models.CharField(max_length=4, verbose_name='Sale operation type', choices=OPERATION_TYPE_CHOICES)
     contractType = models.CharField(max_length=1, verbose_name='Contract type', choices=CONTRACT_TYPE_CHOICES)
@@ -40,6 +41,14 @@ class Order(DateTimeModel):
     itemsCount = models.PositiveSmallIntegerField(default=0, verbose_name='Quantity of items')
     partial = models.BooleanField(default=False, verbose_name='Integrity status')
     iteration = models.SmallIntegerField(default=1, verbose_name='Order processing iteration number')
+    csValidityStatus = models.BooleanField(null=True, default=None, verbose_name='Customer Service validation status')
+    csDownloadStatus = models.BooleanField(default=False, verbose_name='Customer Service download status')
+    csDownloadedBy = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
+                                       verbose_name='Customer Service downloaded by', null=True, blank=True)
+    cs1CReadinessStatus = models.BooleanField(default=False, verbose_name='Customer Service 1C readiness status ')
+    cs1CUnloadStatus = models.BooleanField(default=False, verbose_name='Customer Service 1C unloading status ')
+    cs1CProcessingStatus = models.CharField(max_length=3, null=True, blank=True, default=None, choices=PROCESSING_CHOICES,
+                                            verbose_name='Customer Service 1C processing status ')
 
     class Meta:
         verbose_name = 'Order'

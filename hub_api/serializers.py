@@ -95,6 +95,12 @@ class OrderModelSerializer(serializers.ModelSerializer):
             else:
                 raise serializers.ValidationError(f"Product category {value} is not traceable.")
 
+    def validate_customerOrderNumber(self, value):
+        if len(value) < 10:
+            raise serializers.ValidationError(f"Ensure customerOrderNumber field has 10 characters.")
+        else:
+            return value
+
     def create(self, validated_data):
         sPositionSet = validated_data.pop('sPositionSet')
         order = Order.objects.create(**validated_data)
@@ -163,6 +169,12 @@ class OrderNonTNTModelSerializer(serializers.ModelSerializer):
                 return value
             else:
                 raise serializers.ValidationError(f"Product category {value} is traceable.")
+
+    def validate_customerOrderNumber(self, value):
+        if len(value) < 10:
+            raise serializers.ValidationError(f"Ensure customerOrderNumber field has 10 characters.")
+        else:
+            return value
 
     def create(self, validated_data):
         sPositionSet = validated_data.pop('sPositionSet')

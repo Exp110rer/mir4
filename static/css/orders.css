@@ -36,6 +36,12 @@ td {
 	border-top: none;
 	border-left: none;
 }
+
+.td_short{
+	width: 5px;
+	text-align: center;
+}
+
 .td_deleted {
 	color: #D5604F;
 	text-decoration: line-through;
@@ -101,6 +107,7 @@ td {
 	cursor: pointer;
 }
 .button:hover {opacity: 0.8;}
+.button:disabled {opacity: 0.3;}
 .header {
 	display: flex;
 	justify-content: flex-start;
