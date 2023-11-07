@@ -1,0 +1,63 @@
+{% load static %}
+{% load hub_portal_filters %}
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="icon" href="{% static 'images/favicon.svg' %}" type="image/x-icon">
+    <title>iHUBzone Orders</title>
+    <link href="{% static 'css/orders.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<div class="header"><img src="{% static 'images/ihubzone.svg' %}" alt="" height="30"/><span>iHUBzone</span></div>
+<div class="header_user"><span>{{ user.username }}</span><br><a
+        href="{% url 'mirusers:logout' %}">logout</a></div>
+
+{#<form method="get" name="csform" action="{% url 'hub_portal:orders_cs' %}">#}
+<div class="title">
+    <div class="item"><h4>Will you confirm the below orders for 1C ?</h4></div>
+
+
+    <div class="item">
+        <input class="button" type="submit" value="Yes"
+               onclick="window.open('{% url 'hub_portal:creadiness' %}?filter_date={{ filter_date }}&filter_hub={{ filter_hub }}&filter_productCategory={{ filter_productCategory }}', '_self')">
+    </div>
+
+    <div class="item">
+        <input class="button" type="submit" value="No"
+               onclick="window.open('{% url 'hub_portal:orders_cs' %}?filter_date={{ filter_date }}&filter_hub={{ filter_hub }}&filter_productCategory={{ filter_productCategory }}', '_self')">
+    </div>
+
+</div>
+
+{#</form>#}
+
+<div class="footer"><span>powered by</span><a href="https://rikitlab.com" target="_blank"><img
+        src="{% static 'images/rikitlab.svg' %}" alt="" height="30"/></a></div>
+
+
+<table align="center" cellpadding="5" cellspacing="0">
+    <tbody>
+    <tr>
+        <th>№ Заказа</th>
+        <th>Хаб</th>
+        <th>Тип стока</th>
+        <th class="td_end">Delivery Date</th>
+    </tr>
+    {% for order in orders_for_readiness %}
+        <tr>
+            <td class="td_numm"> {{ order.order }}</td>
+            <td> {{ order.hub.erpname }}</td>
+            <td> {{ order.productCategory|product_category_name }} </td>
+            <td class="td_end"> {{ order.buyoutDate|date:'d.m.Y' }} </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+</body>
+
+</html>
