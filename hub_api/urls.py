@@ -2,7 +2,8 @@ from django.urls import path, include
 from hub_api.apps import HubApiConfig
 from hub_api.viewsets import OrderCreateModelViewSetSNS, OrderRetrieveModelViewSet, OrderCreateNonTNTModelViewSet, \
     OrderForSputnikListViewSet, OrderForSputnikRetrieveViewSet, OrderForSputnikUUIDUpdateViewSet, \
-    OrderForSputnikCodeValidityUpdateViewSet, OrderRetrieveNonERPModelViewSet, OrderDeleteModelViewSet
+    OrderForSputnikCodeValidityUpdateViewSet, OrderRetrieveNonERPModelViewSet, OrderDeleteModelViewSet, \
+    OrdersFor1CModelViewSet, OrdersUpdateBy1ModelViewSet
 from rest_framework.routers import SimpleRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
@@ -16,6 +17,9 @@ router_hub_api.register('gOrder', OrderRetrieveModelViewSet)
 router_hub_api.register('sOrderNonTnt', OrderCreateNonTNTModelViewSet)
 router_hub_api.register('rOrder', OrderRetrieveNonERPModelViewSet)
 router_hub_api.register('dOrder', OrderDeleteModelViewSet)
+router_hub_api.register('gOrders', OrdersFor1CModelViewSet)
+router_hub_api.register('uOrder', OrdersUpdateBy1ModelViewSet)
+
 
 router_hub_api_validation = SimpleRouter()
 router_hub_api_validation.register('list', OrderForSputnikListViewSet)

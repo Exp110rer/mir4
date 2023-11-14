@@ -1,17 +1,14 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, ListModelMixin, UpdateModelMixin, \
-    DestroyModelMixin
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, ListModelMixin, UpdateModelMixin
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.authentication import BasicAuthentication
-from hub_api.models import Order, Item
+from hub_api.models import Order, Item, Composition
 from hub_api.serializers import OrderModelSerializer, OrderNonTNTModelSerializer, OrderForSputnikListSerializer, \
     OrderForSputnikUUIDUpdateSerializer, OrderValidationForSputnikRetrieveSerializer, OrderGetModelSerializer, \
-    OrderGetERPModelSerializer
-from rest_framework.serializers import ValidationError
+    OrderGetERPModelSerializer, OrdersUpdateBy1CModelSerializer
 from django.shortcuts import get_object_or_404
-from django.core.mail import send_mail
 from .utils import ihubzone_send_mail
 
 SUCCESS_RESPONSE = {"status": "processed"}
@@ -183,7 +180,70 @@ class OrderDeleteModelViewSet(RetrieveModelMixin, GenericViewSet):
             return Response(NO_PERMISSION_RESPONSE, status=status.HTTP_403_FORBIDDEN)
 
 
-# section for codes validation via Sputnik
+class OrdersFor1CModelViewSet(ListModelMixin, GenericViewSet):
+    # serializer_class = OrdersFor1ModelSerializer
+    queryset = Order.objects.filter(csValidityStatus=True, cs1CReadinessStatus=True, cs1CUnloadStatus=False)
+    permission_classes = [DjangoModelPermissions]
+
+    def list(self, request, *args, **kwargs):
+        if request.user.groups.filter(name='ERP_Executives').exists():
+            queryset = self.filter_queryset(self.get_queryset())
+            result = dict()
+            orders = list(queryset)
+            for order in orders:
+                result[order.order] = dict()
+                result[order.order]['customerOrderNumber'] = order.customerOrderNumber
+                result[order.order]['buyoutDate'] = order.buyoutDate
+                result[order.order]['saleType'] = order.saleType
+                result[order.order]['traceability'] = order.traceability
+                if order.traceability:
+                    items = list(Item.objects.only('sku', 'batch', 'unitOfMeasure').filter(validity=True,
+                                                                                           composition__order_id=order.id))
+                    result[order.order]['unitOfMeasure'] = items[0].unitOfMeasure
+                    skus = sorted(list(set(item.sku for item in items)))
+                    for sku in skus:
+                        result[order.order][sku] = dict()
+                        batches = set([item.batch for item in items if item.sku == sku])
+                        for batch in batches:
+                            result[order.order][sku][batch] = len(
+                                [item for item in items if item.sku == sku and item.batch == batch])
+                else:
+                    compositions = list(Composition.objects.only('sku', 'amount', 'unitOfMeasure').filter(order=order))
+                    result[order.order]['unitOfMeasure'] = compositions[0].unitOfMeasure
+                    for composition in compositions:
+                        result[order.order][composition.sku] = dict()
+                        result[order.order][composition.sku]['no_batch'] = composition.amount
+            return Response(result)
+        else:
+            return Response(NO_PERMISSION_RESPONSE, status=status.HTTP_403_FORBIDDEN)
+
+
+class OrdersUpdateBy1ModelViewSet(UpdateModelMixin, GenericViewSet):
+    serializer_class = OrdersUpdateBy1CModelSerializer
+    permission_classes = [DjangoModelPermissions]
+    queryset = Order.objects.filter(cs1CUnloadStatus=False, deleted=False, cs1CReadinessStatus=True, csValidityStatus=True)
+    lookup_field = 'order'
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response({"status": "Success"})
+
+
+
+
+
+    # section for codes validation via Sputnik
+
 
 class OrderForSputnikListViewSet(ListModelMixin, GenericViewSet):
     serializer_class = OrderForSputnikListSerializer
