@@ -45,6 +45,8 @@ class Order(DateTimeModel):
     csDownloadStatus = models.BooleanField(default=False, verbose_name='Customer Service download status')
     csDownloadedBy = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
                                        verbose_name='Customer Service downloaded by', null=True, blank=True)
+    csFDSOfile = models.FileField(null=True, blank=True, verbose_name='FDSO file')
+    csFDSOfileNumber = models.PositiveSmallIntegerField(default=0, verbose_name='FDSO file number')
     cs1CReadinessStatus = models.BooleanField(default=False, verbose_name='Customer Service 1C readiness status ')
     cs1CUnloadStatus = models.BooleanField(default=False, verbose_name='Customer Service 1C unloading status ')
     cs1CProcessingStatus = models.CharField(max_length=3, null=True, blank=True, default=None, choices=PROCESSING_CHOICES,

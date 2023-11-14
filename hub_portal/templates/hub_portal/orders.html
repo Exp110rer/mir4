@@ -51,15 +51,15 @@
             <input class="button"
                    type="submit"
                    value="FDSO summary"
-                    {% if csOrdersForValidation == 0 %}
+                    {% if csOrdersForValidation == 0 or not filter_date or filter_hub == 'ALL' %}
                    disabled="disabled" readonly="readonly"
                     {% else %}
-                   onclick="window.open('{% url 'hub_portal:orders_cscb' %}?filter_date={{ filter_date }}&filter_productCategory={{ filter_productCategory }}&filter_hub={{ filter_hub }}'); document.csform.submit();"
+                   onclick="window.open('{% url 'hub_portal:orders_cscb' %}?filter_date={{ filter_date }}&filter_productCategory={{ filter_productCategory }}&filter_hub={{ filter_hub }}', '_self');"
                     {% endif %}
             >
         </div>
 
-            <div class="item">
+        <div class="item">
             <input class="button"
                    type="submit"
                    value="1C readiness"
@@ -94,10 +94,11 @@
         <th align="center">1C <br> process</th>
         {% if user_group == 'CS' %}
             <th align="left">xlsx link</th>
-            <th align="left" class="td_end">Кто скачивал</th>
+            <th align="left">Кто скачивал</th>
         {% elif user_group == 'BCP' %}
             <th align="left" class="td_end">uids link</th>
         {% endif %}
+        <th class="td_end">FDSO</th>
     </tr>
     {% for order in object_list %}
         <tr>
@@ -116,24 +117,25 @@
             <td {% if order.deleted == True %} class="td_deleted" {% elif order.itemsCount == 1 %}
                                                class="td_suspicious" {% endif %}> {{ order.contractType|order_contract_type }}</td>
             <td {% if order.deleted == True %}
-                    class="td_deleted"
-                {% elif order.itemsCount == 1 %}
-                    class="td_suspicious"
-                {% endif %}>
+                class="td_deleted"
+            {% elif order.itemsCount == 1 %}
+                class="td_suspicious"
+            {% endif %}>
                 {{ order.status|order_status }}
                 {% if order.itemsCount == 1 and order.deleted == 0 %}
                     {{ order.get_status.1 }} / {{ order.get_status.0 }}
                 {% endif %}
             </td>
-            {% if order.csValidityStatus is not Null %}
+
+            {% if order.csValidityStatus is not Null and not order.deleted%}
                 <td class="td_short"><input type="checkbox" align="center"
                         {% if order.csValidityStatus == 1 %}
-                           checked
+                                            checked
                         {% endif %}
                         {% if user == order.csDownloadedBy and order.cs1CReadinessStatus == 0 %}
-                           onchange="location.href='{% url 'hub_portal:cs_validity_status_change' order.pk %}';"
+                                            onchange="location.href='{% url 'hub_portal:cs_validity_status_change' order.pk %}';"
                         {% else %}
-                           disabled="disabled"
+                                            disabled="disabled"
                         {% endif %}
                 >
                 </td>
@@ -141,37 +143,46 @@
                 <td></td>
             {% endif %}
 
-            <td class="td_short
-                {% if order.deleted == True %}
-                    td_deleted
-                {% elif order.itemsCount == 1 %}
-                    td_suspicious {% endif %}">
-                <input type="checkbox" disabled="disabled" {% if order.cs1CReadinessStatus %} checked {% endif %}>
-            </td>
+            {% if not order.deleted %}
+                <td class="td_short">
+                    <input type="checkbox" disabled="disabled" {% if order.cs1CReadinessStatus %} checked {% endif %}>
+                </td>
+            {%  else %}
+                <td></td>
+            {% endif %}
 
-            <td class="td_short
-                {% if order.deleted == True %}
-                    td_deleted
-                {% elif order.itemsCount == 1 %}
-                    td_suspicious {% endif %}">
-                <input type="checkbox" disabled="disabled" {% if order.cs1CUnloadStatus %} checked {% endif %}>
-            </td>
+            {% if not order.deleted %}
+                <td class="td_short">
+                    <input type="checkbox" disabled="disabled" {% if order.cs1CUnloadStatus %} checked {% endif %}>
+                </td>
+            {% else %}
+                <td></td>
+            {% endif %}
 
-            <td></td>
+            <td {% if order.deleted == True %} class="td_deleted" {% elif order.itemsCount == 1 %}
+                                               class="td_suspicious" {% endif %}> {{ order.cs1CProcessingStatus }}</td>
 
-                {% if order.status == 2 and order.deleted == False %}
-                    {% if user_group == 'CS' %}
-                        <td><a href="{% url 'hub_portal:cs_excel' order.pk %}">{{ order.order }}</a></td>
-                        <td class="td_end">{{ order.csDownloadedBy.username }}</td>
-                    {% elif user_group == 'BCP' %}
-                        {% if order.traceability == True %}
-                            <td class="td_end"><a href="{% url 'hub_portal:bcp_excel' order.pk %}">{{ order.order }}</a>
-                            </td>
-                        {% endif %}
+
+
+            {% if order.status == 2 and order.deleted == False %}
+                {% if user_group == 'CS' %}
+                    <td><a href="{% url 'hub_portal:cs_excel' order.pk %}">{{ order.order }}</a></td>
+                    <td>{{ order.csDownloadedBy.username }}</td>
+                {% elif user_group == 'BCP' %}
+                    {% if order.traceability == True %}
+                        <td><a href="{% url 'hub_portal:bcp_excel' order.pk %}">{{ order.order }}</a>
+                        </td>
                     {% endif %}
-                {% else %}
-                    <td></td>
                 {% endif %}
+            {% else %}
+                <td></td>
+            {% endif %}
+
+        {% if order.csDownloadStatus and not order.deleted%}
+            <td class="td_end"><a href="{% url 'hub_portal:fdso' order.pk %}">fdso</a></td>
+        {% else %}
+            <td class="td_end"></td>
+        {% endif %}
         </tr>
     {% endfor %}
     </tbody>

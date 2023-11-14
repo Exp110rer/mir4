@@ -253,7 +253,27 @@ class OrderGetModelSerializer(serializers.ModelSerializer):
         exclude = (
             'id', 'validation_uuid', 'deleted', 'updatedBy', 'downloadedBy', 'itemsCount', 'iteration',)
 
-    # section for codes validation via Sputnik
+
+class OrdersUpdateBy1CModelSerializer(serializers.ModelSerializer):
+
+    def validate_cs1CUnloadStatus(self, value):
+        if value is True:
+            return value
+        else:
+            raise serializers.ValidationError('The only "true" value is accepted for cs1UploadStatus ')
+
+    def validate_cs1CProcessingStatus(self, value):
+        if value == "" or value is None:
+            raise serializers.ValidationError('The only "OK" or "NOK" values are accepted for cs1CProcessingStatus ')
+        else:
+            return value
+
+    class Meta:
+        model = Order
+        fields = ('cs1CUnloadStatus', 'cs1CProcessingStatus')
+        extra_kwargs = {'cs1CUnloadStatus': {'required': True}, 'cs1CProcessingStatus': {'required': True}}
+
+        # section for codes validation via Sputnik
 
 
 class OrderForSputnikListSerializer(serializers.ModelSerializer):
