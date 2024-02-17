@@ -10,6 +10,7 @@ from hub_api.serializers import OrderModelSerializer, OrderNonTNTModelSerializer
     OrderGetERPModelSerializer, OrdersUpdateBy1CModelSerializer
 from django.shortcuts import get_object_or_404
 from .utils import ihubzone_send_mail
+from hub_portal.templatetags.hub_portal_filters import order_contract_type, order_uom
 
 SUCCESS_RESPONSE = {"status": "processed"}
 DELETE_RESPONSE = {"status": "deleted"}
@@ -196,10 +197,13 @@ class OrdersFor1CModelViewSet(ListModelMixin, GenericViewSet):
                 result[order.order]['buyoutDate'] = order.buyoutDate
                 result[order.order]['saleType'] = order.saleType
                 result[order.order]['traceability'] = order.traceability
+                result[order.order]['hub'] = order.hub.name
+                result[order.order]['productCategory'] = order.productCategory
+                result[order.order]['stockType'] = order_contract_type(order.contractType)
                 if order.traceability:
                     items = list(Item.objects.only('sku', 'batch', 'unitOfMeasure').filter(validity=True,
                                                                                            composition__order_id=order.id))
-                    result[order.order]['unitOfMeasure'] = items[0].unitOfMeasure
+                    result[order.order]['unitOfMeasure'] = order_uom(items[0].unitOfMeasure)
                     skus = sorted(list(set(item.sku for item in items)))
                     for sku in skus:
                         result[order.order][sku] = dict()
@@ -209,7 +213,7 @@ class OrdersFor1CModelViewSet(ListModelMixin, GenericViewSet):
                                 [item for item in items if item.sku == sku and item.batch == batch])
                 else:
                     compositions = list(Composition.objects.only('sku', 'amount', 'unitOfMeasure').filter(order=order))
-                    result[order.order]['unitOfMeasure'] = compositions[0].unitOfMeasure
+                    result[order.order]['unitOfMeasure'] = order_uom(compositions[0].unitOfMeasure)
                     for composition in compositions:
                         result[order.order][composition.sku] = dict()
                         result[order.order][composition.sku]['no_batch'] = composition.amount

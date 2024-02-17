@@ -273,7 +273,7 @@ class OrdersUpdateBy1CModelSerializer(serializers.ModelSerializer):
         fields = ('cs1CUnloadStatus', 'cs1CProcessingStatus')
         extra_kwargs = {'cs1CUnloadStatus': {'required': True}, 'cs1CProcessingStatus': {'required': True}}
 
-        # section for codes validation via Sputnik
+# section for codes validation via Sputnik
 
 
 class OrderForSputnikListSerializer(serializers.ModelSerializer):

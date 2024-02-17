@@ -39,7 +39,17 @@ def order_status(value):
         return 'ПОДОЗРЕНИЕ НА ОШИБКУ'
 
 
+def order_uom(value):
+    if value == 'case':
+        return 'CS'
+    elif value == 'out':
+        return 'OUT'
+    else:
+        return 'NA'
+
+
 register.filter('product_category_name', product_category_name)
 register.filter('order_sale_type', order_sale_type)
 register.filter('order_contract_type', order_contract_type)
 register.filter('order_status', order_status)
+register.filter('order_uom', order_uom)
