@@ -47,10 +47,49 @@ def get_filter_query(request, option=None):
 class OrderBCPListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Order
     template_name = 'hub_portal/orders_bcp.html'
-    queryset = Order.objects.filter(status=2, created__gt=datetime.now() - timedelta(days=200))
+
+    # queryset = Order.objects.filter(buyoutDate__gte=datetime.now(), buyoutDate__lt=datetime.now() + timedelta(days=7))
 
     def test_func(self):
-        return self.request.user.groups.filter(name='Orders_BCP').exists()
+        return self.request.user.groups.filter(name='Orders_CS').exists() or self.request.user.groups.filter(
+            name='Orders_BCP').exists()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        filter_date = self.request.GET.get('filter_date', None)
+        filter_productCategory = self.request.GET.get('filter_productCategory', 'ALL')
+        filter_hub = self.request.GET.get('filter_hub', 'ALL')
+        context = super().get_context_data()
+        if self.request.user.groups.filter(name='Orders_CS').exists():
+            context['user_group'] = 'CS'
+        elif self.request.user.groups.filter(name='Orders_BCP').exists():
+            context['user_group'] = 'BCP'
+        else:
+            context['user_group'] = 'NA'
+        context['product_categories'] = ProductCategory.objects.all()
+        context['hubs'] = Hub.objects.filter(id__gt=1)
+        context['filter_date'] = filter_date
+        context['filter_productCategory'] = filter_productCategory
+        context['filter_hub'] = filter_hub
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        f_date = request.GET.get('filter_date', None)
+        filter_date = datetime.strptime(f_date, "%Y-%m-%d") if f_date else None
+        filter_productCategory = request.GET.get('filter_productCategory', 'ALL')
+        filter_hub = request.GET.get('filter_hub', 'ALL')
+        filter_query = dict()
+        if filter_date:
+            filter_query['buyoutDate'] = filter_date
+        else:
+            filter_query['buyoutDate__gte'] = datetime.now()
+            filter_query['buyoutDate__lt'] = datetime.now() + timedelta(days=14)
+        if filter_productCategory != 'ALL':
+            filter_query['productCategory'] = filter_productCategory
+        if filter_hub != 'ALL':
+            filter_query['hub__name'] = filter_hub
+        print("Filter query", filter_query)
+        self.queryset = Order.objects.filter(**filter_query).order_by('buyoutDate')
+        return super().dispatch(request)
 
 
 class OrderCSListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
